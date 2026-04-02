@@ -137,9 +137,11 @@ function getCatholicDailyReading(date: Date) {
 
 const CrossSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="h-7 w-7"><path d="M12 2v20M2 12h20"/></svg>;
 const ChurchSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7"><path d="M4 22V10l8-6 8 6v12H4z"/><rect x="9" y="14" width="6" height="8"/></svg>;
+
+export function Home() {
   const [tickerIndex, setTickerIndex] = useState(0);
   const [showTicker, setShowTicker] = useState(true);
-  const [readingIndex, setReadingIndex] = useState(() => getDailyReadingIndex());
+  const [dailyReading, setDailyReading] = useState(() => getCatholicDailyReading(new Date()));
   const [languageIndex, setLanguageIndex] = useState(0);
   const [showReading, setShowReading] = useState(true);
   useScrollReveal();
@@ -169,26 +171,21 @@ const ChurchSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColo
   }, []);
 
   useEffect(() => {
-    const updateDailyReading = () => setReadingIndex(getDailyReadingIndex());
+    const updateDailyReading = () => setDailyReading(getCatholicDailyReading(new Date()));
     const now = new Date();
     const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5);
     const delay = nextMidnight.getTime() - now.getTime();
-    let dailyInterval: ReturnType<typeof setInterval> | undefined;
 
     const midnightTimer = setTimeout(() => {
       updateDailyReading();
-      dailyInterval = setInterval(updateDailyReading, 24 * 60 * 60 * 1000);
+      setInterval(updateDailyReading, 24 * 60 * 60 * 1000);
     }, delay);
 
-    return () => {
-      clearTimeout(midnightTimer);
-      if (dailyInterval) clearInterval(dailyInterval);
-    };
+    return () => clearTimeout(midnightTimer);
   }, []);
 
-  const currentReading = DAILY_READINGS[readingIndex];
   const currentLanguage = LANGUAGES[languageIndex];
-  const currentText = currentReading.versions[currentLanguage.code];
+  const currentText = dailyReading.versions[currentLanguage.code];
 
   return (
     <div>
@@ -218,7 +215,7 @@ const ChurchSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColo
           <div className="rounded-3xl bg-emerald-950/90 p-6 shadow-[0_0_48px_rgba(141,86,58,0.45)] border border-emerald-200/15" style={{ backdropFilter: "blur(22px)" }}>
             <p className="text-xs uppercase tracking-[0.35em] text-emerald-100 font-bold mb-3">Daily Reading · {currentLanguage.label}</p>
             <p className="text-base md:text-lg text-emerald-50 font-semibold leading-relaxed">“{currentText}”</p>
-            <p className="text-[12px] uppercase tracking-[0.3em] text-emerald-200 font-semibold mt-3">{currentReading.reference}</p>
+            <p className="text-[12px] uppercase tracking-[0.3em] text-emerald-200 font-semibold mt-3">{dailyReading.reference}</p>
           </div>
         </div>
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
