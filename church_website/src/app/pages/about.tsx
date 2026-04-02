@@ -140,6 +140,61 @@ export function About() {
         </div>
       </section>
 
+      {/* Substations Section */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-green-900 mb-3">Our Substations</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">St. Francis Cheptarit Parish also serves the faithful through our outstation community, extending pastoral care and worship opportunities throughout the region.</p>
+            <div className="section-divider"></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="rounded-2xl p-8 shadow-md border border-green-100 hover:shadow-lg transition-all bg-green-50">
+              <div className="flex items-center gap-3 mb-4">
+                <Church className="h-8 w-8 text-green-700" />
+                <h3 className="text-2xl font-bold text-green-900">St. Lawrence Tebeson</h3>
+              </div>
+              <div className="w-16 h-1 rounded mb-4" style={{ background: "linear-gradient(90deg, #7c4c2e, #8d5439)" }}></div>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                St. Lawrence Tebeson is an important outstation chapel of our parish, serving the Catholic faithful 
+                in the Tebeson area and surrounding communities.
+              </p>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                The chapel provides a place of worship, prayer, and community for local families, allowing them to participate 
+                in Mass and receive sacraments closer to their homes. Through this substation, the mission of St. Francis Cheptarit 
+                reaches beyond our main church to serve more people in faith.
+              </p>
+              <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                <p className="text-sm text-gray-600">
+                  <strong>Parish Commitment:</strong> We maintain St. Lawrence Tebeson as an active center for spiritual growth 
+                  and community service in that region.
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl p-8 shadow-md border border-green-100 hover:shadow-lg transition-all">
+              <h3 className="text-xl font-bold text-green-900 mb-4">Substation Services</h3>
+              <ul className="space-y-3">
+                {[
+                  { icon: "⛪", label: "Sunday Worship", desc: "Regular Mass celebrations for the Tebeson community" },
+                  { icon: "💒", label: "Sacraments", desc: "Confessions, Eucharist, and community prayers" },
+                  { icon: "👨‍👩‍👧‍👦", label: "Community Events", desc: "Gatherings, prayer groups, and faith formation" },
+                  { icon: "✝️", label: "Pastoral Care", desc: "Spiritual guidance and support from our clergy" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-2xl flex-shrink-0">{item.icon}</span>
+                    <div>
+                      <p className="font-semibold text-green-900 text-sm">{item.label}</p>
+                      <p className="text-xs text-gray-600">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Location */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">

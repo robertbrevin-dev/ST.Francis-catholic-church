@@ -36,44 +36,107 @@ const LANGUAGES = [
   { code: "ke", label: "Kalenjin" },
 ];
 
-const DAILY_READINGS = [
-  {
-    reference: "Psalm 118:24",
-    versions: {
-      en: "This is the day the Lord has made; let us rejoice and be glad in it.",
-      sw: "Siku hii ni ya Bwana; tushangilie na kufurahie.",
-      ke: "Abo ngot ne Atei ameet; tichik kele kemogit.",
-    },
-  },
-  {
-    reference: "Matthew 11:28",
-    versions: {
-      en: "Come to me, all you who labor and are burdened, and I will give you rest.",
-      sw: "Njooni kwangu ninyi nyote msumbuliwa na mzigo, nami nitawapumzisha.",
-      ke: "Boit ko amu, kib ko ya kore ne motet, nei akom apio.",
-    },
-  },
-  {
-    reference: "Philippians 4:13",
-    versions: {
-      en: "I can do all things through Christ who strengthens me.",
-      sw: "Ninaweza mambo yote kwa yeye aniyenifanya niwe imara.",
-      ke: "Aeng ai koechu ne Ukwat, koming kom apio.",
-    },
-  },
-];
+const CATHOLIC_LITURGICAL_READINGS = {
+  advent: [
+    { reference: "Isaiah 9:6", versions: { en: "For to us a child is born.", sw: "Mtoto ametwewa kwetu.", ke: "Atet ko kenyu..." } },
+    { reference: "Isaiah 40:3", versions: { en: "Prepare the way of the Lord.", sw: "Tayari njia ya Bwana.", ke: "Nging che Atei..." } },
+    { reference: "Matthew 3:1-2", versions: { en: "Repent, for the kingdom of heaven is at hand.", sw: "Tubadilike, ufalme umekaribia.", ke: "Toben, koit ne uka..." } },
+    { reference: "Psalm 85:8", versions: { en: "Let me hear what God will speak.", sw: "Nisikie Bwana aseme.", ke: "Kok konit ne Atei..." } },
+    { reference: "Luke 1:37", versions: { en: "Nothing is impossible with God.", sw: "Hakuna yasiyowezekana kwa Mungu.", ke: "Koito ne Atei..." } },
+    { reference: "Philippians 4:4", versions: { en: "Rejoice in the Lord always.", sw: "Furahini daima katika Bwana.", ke: "Kusoik ne Atei..." } },
+    { reference: "John 1:14", versions: { en: "The Word became flesh and dwelt among us.", sw: "Neno likawa mwili.", ke: "Neno ngongen..." } },
+  ],
+  christmas: [
+    { reference: "Luke 2:11", versions: { en: "Today a Savior is born for you.", sw: "Leo Mkombozi amezaliwa kwenu.", ke: "Omukor kochir..." } },
+    { reference: "John 1:14", versions: { en: "The Word became flesh.", sw: "Neno likawa mwili.", ke: "Neno ngo ngon..." } },
+    { reference: "Matthew 2:10", versions: { en: "They rejoiced with great joy.", sw: "Walifurahi kwa furaha.", ke: "Kokido ne kerer..." } },
+    { reference: "Psalm 96:11", versions: { en: "Let heavens rejoice.", sw: "Mbingu zishangilie.", ke: "Megat miw..." } },
+    { reference: "Isaiah 7:14", versions: { en: "A virgin shall conceive.", sw: "Bikira atapata mimba.", ke: "Bikra ke rest..." } },
+    { reference: "Luke 2:14", versions: { en: "Glory to God in the highest.", sw: "Utukufu kwa Mungu juu sana.", ke: "Naitet ne Atei..." } },
+    { reference: "Psalm 98:4", versions: { en: "Make a joyful noise.", sw: "Fanya sauti ya furaha.", ke: "Kor koirir..." } },
+  ],
+  lent: [
+    { reference: "Joel 2:12", versions: { en: "Return to Me with all your heart.", sw: "Rudi kwangu kwa moyo wako wote.", ke: "Pumen ko Atei..." } },
+    { reference: "Psalm 51:10", versions: { en: "Create in me a clean heart.", sw: "Nitengenezee moyo safi.", ke: "Kobet koi ne kulo..." } },
+    { reference: "Matthew 6:16", versions: { en: "When you fast, do not look sad.", sw: "Usije ukanyamaza kwa huzuni.", ke: "Kobo ne chite..." } },
+    { reference: "Romans 5:8", versions: { en: "God shows His love while we were sinners.", sw: "Mungu alituonyesha upendo hata tulikuwa watakatifu.", ke: "Atei akoyu neik..." } },
+    { reference: "2 Corinthians 5:17", versions: { en: "Anyone in Christ is a new creation.", sw: "Mtoto katika Kristo ni miumbe mpya.", ke: "Omo ko Ukwat..." } },
+    { reference: "Hebrews 4:16", versions: { en: "Approach the throne of grace.", sw: "Karibuni kwa kiti cha neema.", ke: "Kotik ka ngai..." } },
+    { reference: "Luke 9:23", versions: { en: "Deny yourself and take up your cross.", sw: "Jinyenyekeze na ukabidhi msalaba.", ke: "Noyongit ne karys..." } },
+  ],
+  easter: [
+    { reference: "Matthew 28:6", versions: { en: "He is risen.", sw: "Amefufuka.", ke: "Akei amut..." } },
+    { reference: "John 11:25", versions: { en: "I am the resurrection and the life.", sw: "Mimi ndimi ufufuo na uzima.", ke: "Anei ne fungayik..." } },
+    { reference: "Acts 2:24", versions: { en: "God raised Him up.", sw: "Mungu alimfufua.", ke: "Atei akom fuf..." } },
+    { reference: "Romans 6:4", versions: { en: "Walk in newness of life.", sw: "Tembea katika uzima mpya.", ke: "Noyai ne utet..." } },
+    { reference: "1 Peter 1:3", versions: { en: "Born again to a living hope.", sw: "Tumezaliwa upya kwa tumaini hai.", ke: "Teteiamet nek..." } },
+    { reference: "Revelation 1:18", versions: { en: "I am alive forever.", sw: "Niko hai milele.", ke: "Nae neun che..." } },
+    { reference: "Luke 24:32", versions: { en: "Hearts burned within us.", sw: "Mioyo iliwaka ndani yetu.", ke: "Kok abot..." } },
+  ],
+  ordinary: [
+    { reference: "Psalm 23:1", versions: { en: "The Lord is my shepherd.", sw: "Bwana ndiye mchungaji wangu.", ke: "Atei ko aror..." } },
+    { reference: "Philippians 4:13", versions: { en: "I can do all things through Christ.", sw: "Ninaweza mambo yote kwa Kristo.", ke: "Keito ne Ukwat..." } },
+    { reference: "Matthew 5:14", versions: { en: "You are the light of the world.", sw: "Ninyi ni nuru ya dunia.", ke: "Abei ne ngaim..." } },
+    { reference: "John 8:12", versions: { en: "I am the light of the world.", sw: "Mimi ndimi nuru ya dunia.", ke: "Anei ne ngaim..." } },
+    { reference: "Psalm 46:10", versions: { en: "Be still, and know that I am God.", sw: "Tulieni, na mjue mimi ni Mungu.", ke: "Noombor, neget Atei..." } },
+    { reference: "Romans 12:2", versions: { en: "Be transformed by the renewal of your mind.", sw: "Geukieni kwa uumbaji mpya wa akili zenu.", ke: "Nooro che keitar..." } },
+    { reference: "1 Corinthians 13:13", versions: { en: "Faith, hope and love remain.", sw: "Imani, tumaini na upendo navyo vitadumu.", ke: "Nangusen, ret, na kim...", } },
+  ],
+};
+
+function getEasterDate(year: number): Date {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(year, month, day);
+}
+
+function getFirstSundayOfAdvent(year: number): Date {
+  const christmas = new Date(year, 11, 25);
+  const day = christmas.getDay();
+  const diff = (day + 7 - 0) % 7;
+  const firstSunday = new Date(christmas);
+  firstSunday.setDate(christmas.getDate() - (22 + diff));
+  return firstSunday;
+}
+
+function getLiturgicalSeason(date: Date): keyof typeof CATHOLIC_LITURGICAL_READINGS {
+  const year = date.getFullYear();
+  const easter = getEasterDate(year);
+  const ashWednesday = new Date(easter);
+  ashWednesday.setDate(easter.getDate() - 46);
+  const pentecost = new Date(easter);
+  pentecost.setDate(easter.getDate() + 49);
+  const adventStart = getFirstSundayOfAdvent(year);
+
+  if (date >= adventStart && date < new Date(year, 11, 25)) return "advent";
+  if (date >= new Date(year, 11, 25) || date < new Date(year, 0, 6)) return "christmas";
+  if (date >= ashWednesday && date < easter) return "lent";
+  if (date >= easter && date <= pentecost) return "easter";
+  return "ordinary";
+}
+
+function getCatholicDailyReading(date: Date) {
+  const season = getLiturgicalSeason(date);
+  const readings = CATHOLIC_LITURGICAL_READINGS[season] || CATHOLIC_LITURGICAL_READINGS.ordinary;
+  const weekday = date.getDay(); // Sunday = 0
+  const index = (weekday + 6) % 7; // Monday=0, Sunday=6
+  return readings[index % readings.length];
+}
 
 const CrossSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="h-7 w-7"><path d="M12 2v20M2 12h20"/></svg>;
 const ChurchSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7"><path d="M4 22V10l8-6 8 6v12H4z"/><rect x="9" y="14" width="6" height="8"/></svg>;
-const getDailyReadingIndex = () => {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now.getTime() - start.getTime();
-  const dayOfYear = Math.floor(diff / 86400000);
-  return dayOfYear % DAILY_READINGS.length;
-};
-
-export function Home() {
   const [tickerIndex, setTickerIndex] = useState(0);
   const [showTicker, setShowTicker] = useState(true);
   const [readingIndex, setReadingIndex] = useState(() => getDailyReadingIndex());
