@@ -1,8 +1,12 @@
-import { Mail, Phone, MapPin, ArrowUp } from "lucide-react";
+import { Mail, Phone, MapPin, ArrowUp, MessageCircle } from "lucide-react";
 import { Link } from "react-router";
-
-const CHURCH_PHONE = "+254 700 000 000";
-const CHURCH_EMAIL = "info@stfrancischeptarit.org";
+import {
+  PARISH_EMAIL,
+  PARISH_PHONE_DISPLAY,
+  PARISH_PHONE_TEL,
+  PARISH_POSTAL_LINES,
+  PARISH_WHATSAPP_E164,
+} from "../../lib/parishContact";
 const FACEBOOK_URL = "#";
 const YOUTUBE_URL = "#";
 const INSTAGRAM_URL = "#";
@@ -129,15 +133,28 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-start gap-3 text-sm text-green-200">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0 text-green-400" />
-                <span className="text-xs">Cheptarit, Mosoriot<br />Nandi County, Kenya</span>
+                <span className="text-xs whitespace-pre-line">{PARISH_POSTAL_LINES}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Phone className="h-4 w-4 flex-shrink-0 text-green-400" />
-                <a href={`tel:${CHURCH_PHONE.replace(/\s/g, "")}`} className="text-green-200 hover:text-green-300 transition-colors text-xs">{CHURCH_PHONE}</a>
+                <a href={`tel:${PARISH_PHONE_TEL}`} className="text-green-200 hover:text-green-300 transition-colors text-xs">
+                  Parish: {PARISH_PHONE_DISPLAY}
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <MessageCircle className="h-4 w-4 flex-shrink-0 text-green-400" />
+                <a
+                  href={`https://wa.me/${PARISH_WHATSAPP_E164}?text=Hello%20St.%20Francis%20Cheptarit%20Parish`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-200 hover:text-green-300 transition-colors text-xs"
+                >
+                  WhatsApp: {PARISH_PHONE_DISPLAY}
+                </a>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="h-4 w-4 flex-shrink-0 text-green-400" />
-                <a href={`mailto:${CHURCH_EMAIL}`} className="text-green-200 hover:text-green-300 transition-colors text-xs break-all">{CHURCH_EMAIL}</a>
+                <a href={`mailto:${PARISH_EMAIL}`} className="text-green-200 hover:text-green-300 transition-colors text-xs break-all">{PARISH_EMAIL}</a>
               </div>
               <div className="mt-3 p-3 rounded-xl border border-white/10 bg-white/5">
                 <p className="text-xs text-green-300 font-semibold mb-1">Office Hours</p>

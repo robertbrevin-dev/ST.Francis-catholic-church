@@ -1,9 +1,6 @@
 import { Phone, Church, HandHelping, Droplet, Sparkles, Cross, Handshake, HandHeart, ShieldCheck, BookOpen, Lightbulb } from "lucide-react";
 import { Link } from "react-router";
-
-// ============================
-const CHURCH_PHONE = "+254 700 000 000"; // ← Replace with actual phone number
-// ============================
+import { PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL } from "../../lib/parishContact";
 
 const SERVICES = [
   {
@@ -252,11 +249,11 @@ export function Services() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href={`tel:${CHURCH_PHONE.replace(/\s/g, "")}`}
+              href={`tel:${PARISH_PHONE_TEL}`}
               className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg"
             >
               <Phone className="h-5 w-5" />
-              Call: {CHURCH_PHONE}
+              Call: {PARISH_PHONE_DISPLAY}
             </a>
             <Link
               to="/contact"

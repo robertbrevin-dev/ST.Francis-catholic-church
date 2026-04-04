@@ -1,6 +1,6 @@
 import { Phone, Users, Music, BookOpen, Heart, Cross, Mic2, GraduationCap, Home, HandHeart, Church } from "lucide-react";
 
-const CHURCH_PHONE = "+254 700 000 000";
+import { PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL } from "../../lib/parishContact";
 
 const MenIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
@@ -124,8 +124,8 @@ export function Ministries() {
         <div className="container mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold mb-4">Want to Get Involved?</h2>
           <p className="text-green-200 mb-8 leading-relaxed">Speak to the Parish Priest, contact the parish office, or approach any ministry coordinator after Mass. You are always welcome.</p>
-          <a href={`tel:${CHURCH_PHONE.replace(/\s/g,"")}`} className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
-            <Phone className="h-5 w-5" /> Call: {CHURCH_PHONE}
+          <a href={`tel:${PARISH_PHONE_TEL}`} className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
+            <Phone className="h-5 w-5" /> Call: {PARISH_PHONE_DISPLAY}
           </a>
         </div>
       </section>

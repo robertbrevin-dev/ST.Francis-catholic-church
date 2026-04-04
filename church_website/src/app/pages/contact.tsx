@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, AlertTriangle, CheckCircle } from "lucide-react";
 import { useScrollReveal, ScrollReveal } from "../components/scroll-reveal";
-
-const CHURCH_PHONE = "+254 700 000 000";
-const CHURCH_EMAIL = "info@stfrancischeptarit.org";
-const WHATSAPP_NUMBER = "254700000000";
+import {
+  PARISH_EMAIL,
+  PARISH_PHONE_DISPLAY,
+  PARISH_PHONE_TEL,
+  PARISH_POSTAL_LINES,
+  PARISH_WHATSAPP_E164,
+} from "../../lib/parishContact";
 
 export function Contact() {
   useScrollReveal();
@@ -46,9 +49,10 @@ export function Contact() {
               <h2 className="text-2xl font-bold text-green-900 mb-6">Get In Touch</h2>
               <div className="space-y-4 mb-8">
                 {[
-                  { icon: <MapPin className="h-5 w-5" />, label:"Address", value:"Cheptarit, Mosoriot\nNandi County, Kenya" },
-                  { icon: <Phone className="h-5 w-5" />, label:"Phone", value:CHURCH_PHONE, href:`tel:${CHURCH_PHONE.replace(/\s/g,"")}` },
-                  { icon: <Mail className="h-5 w-5" />, label:"Email", value:CHURCH_EMAIL, href:`mailto:${CHURCH_EMAIL}` },
+                  { icon: <MapPin className="h-5 w-5" />, label:"Address", value: PARISH_POSTAL_LINES },
+                  { icon: <Phone className="h-5 w-5" />, label:"Parish phone", value: PARISH_PHONE_DISPLAY, href:`tel:${PARISH_PHONE_TEL}` },
+                  { icon: <MessageCircle className="h-5 w-5" />, label:"WhatsApp", value: PARISH_PHONE_DISPLAY, href:`https://wa.me/${PARISH_WHATSAPP_E164}` },
+                  { icon: <Mail className="h-5 w-5" />, label:"Email", value: PARISH_EMAIL, href:`mailto:${PARISH_EMAIL}` },
                   { icon: <Clock className="h-5 w-5" />, label:"Office Hours", value:"Mon–Fri: 8:00 AM – 5:00 PM\nSaturday: 9:00 AM – 12:00 PM" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100">
@@ -58,7 +62,13 @@ export function Contact() {
                     <div>
                       <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
                       {item.href ? (
-                        <a href={item.href} className="text-gray-700 hover:text-green-700 transition-colors whitespace-pre-line">{item.value}</a>
+                        <a
+                          href={item.href}
+                          className="text-gray-700 hover:text-green-700 transition-colors whitespace-pre-line"
+                          {...(item.href.startsWith("https://wa.me") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        >
+                          {item.value}
+                        </a>
                       ) : (
                         <p className="text-gray-700 whitespace-pre-line">{item.value}</p>
                       )}
@@ -74,7 +84,7 @@ export function Contact() {
                 </h3>
                 <p className="text-green-100 text-sm mb-4">For quick questions, prayer requests, or to reach the parish team, send us a WhatsApp message.</p>
                 <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20St.%20Francis%20Cheptarit%20Parish%2C%20I%20would%20like%20to%20inquire%20about...`}
+                  href={`https://wa.me/${PARISH_WHATSAPP_E164}?text=Hello%20St.%20Francis%20Cheptarit%20Parish%2C%20I%20would%20like%20to%20inquire%20about...`}
                   target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-white text-green-800 font-bold px-6 py-3 rounded-full hover:bg-green-50 transition-all"
                 >
@@ -137,8 +147,8 @@ export function Contact() {
               If you or a loved one urgently needs a priest — for Last Rites, Anointing of the Sick, or any pastoral emergency — 
               please call the parish phone immediately at any time of day or night.
             </p>
-            <a href={`tel:${CHURCH_PHONE.replace(/\s/g,"")}`} className="inline-flex items-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-full hover:bg-red-700 transition-all">
-              <Phone className="h-4 w-4" /> Emergency: {CHURCH_PHONE}
+            <a href={`tel:${PARISH_PHONE_TEL}`} className="inline-flex items-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-full hover:bg-red-700 transition-all">
+              <Phone className="h-4 w-4" /> Emergency: {PARISH_PHONE_DISPLAY}
             </a>
           </div>
         </div>

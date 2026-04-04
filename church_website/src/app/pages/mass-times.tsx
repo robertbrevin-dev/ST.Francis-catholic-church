@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Phone, Clock, Sun, Sunrise, Sparkles, Cross } from "lucide-react";
 
-const CHURCH_PHONE = "+254 700 000 000";
+import { PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL } from "../../lib/parishContact";
 
 export function MassTimes() {
   return (
@@ -139,8 +139,8 @@ export function MassTimes() {
         <div className="container mx-auto max-w-3xl text-center text-white">
           <h2 className="text-2xl font-bold mb-3">Questions About Mass Times?</h2>
           <p className="text-green-200 mb-6">Contact the Parish Office or call us directly.</p>
-          <a href={`tel:${CHURCH_PHONE.replace(/\s/g,"")}`} className="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
-            <Phone className="h-5 w-5" /> {CHURCH_PHONE}
+          <a href={`tel:${PARISH_PHONE_TEL}`} className="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
+            <Phone className="h-5 w-5" /> {PARISH_PHONE_DISPLAY}
           </a>
         </div>
       </section>

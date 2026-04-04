@@ -1,8 +1,7 @@
 import { Link } from "react-router";
-import { ArrowRight, Phone, Church, Target, Star, MapPin, Building2, Globe } from "lucide-react";
+import { ArrowRight, Phone, Church, Target, Star, MapPin, Building2, Globe, Mail } from "lucide-react";
 import { useScrollReveal, ScrollReveal } from "../components/scroll-reveal";
-
-const CHURCH_PHONE = "+254 700 000 000";
+import { PARISH_EMAIL, PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL, PARISH_POSTAL_LINES } from "../../lib/parishContact";
 
 export function About() {
   useScrollReveal();
@@ -205,9 +204,10 @@ export function About() {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
               {[
-                { icon: <MapPin className="h-5 w-5" />, label: "Address", value: "Cheptarit, Mosoriot\nNandi County, Kenya" },
+                { icon: <MapPin className="h-5 w-5" />, label: "Address", value: PARISH_POSTAL_LINES },
                 { icon: <Building2 className="h-5 w-5" />, label: "Diocese", value: "Diocese of Kapsabet" },
-                { icon: <Phone className="h-5 w-5" />, label: "Phone", value: CHURCH_PHONE, href: `tel:${CHURCH_PHONE.replace(/\s/g,"")}` },
+                { icon: <Phone className="h-5 w-5" />, label: "Phone", value: PARISH_PHONE_DISPLAY, href: `tel:${PARISH_PHONE_TEL}` },
+                { icon: <Mail className="h-5 w-5" />, label: "Email", value: PARISH_EMAIL, href: `mailto:${PARISH_EMAIL}` },
                 { icon: <Globe className="h-5 w-5" />, label: "County", value: "Nandi County, Rift Valley Region" },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100">
@@ -215,7 +215,7 @@ export function About() {
                   <div>
                     <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
                     {item.href ? (
-                      <a href={item.href} className="text-gray-700 font-medium hover:text-green-700 transition-colors">{item.value}</a>
+                      <a href={item.href} className="text-gray-700 font-medium hover:text-green-700 transition-colors break-all">{item.value}</a>
                     ) : (
                       <p className="text-gray-700 font-medium whitespace-pre-line">{item.value}</p>
                     )}
