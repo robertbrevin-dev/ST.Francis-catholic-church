@@ -1,11 +1,12 @@
 import { Mail, Phone, MapPin, ArrowUp, MessageCircle } from "lucide-react";
 import { Link } from "react-router";
 import {
-  PARISH_EMAIL,
-  PARISH_PHONE_DISPLAY,
-  PARISH_PHONE_TEL,
+  CHURCH_EMAIL,
+  CHURCH_PHONE,
+  PARISH_MAILTO_HREF,
   PARISH_POSTAL_LINES,
-  PARISH_WHATSAPP_E164,
+  PARISH_TEL_HREF,
+  WHATSAPP_NUMBER,
 } from "../../lib/parishContact";
 const FACEBOOK_URL = "#";
 const YOUTUBE_URL = "#";
@@ -135,27 +136,33 @@ export function Footer() {
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0 text-green-400" />
                 <span className="text-xs whitespace-pre-line">{PARISH_POSTAL_LINES}</span>
               </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Phone className="h-4 w-4 flex-shrink-0 text-green-400" />
-                <a href={`tel:${PARISH_PHONE_TEL}`} className="text-green-200 hover:text-green-300 transition-colors text-xs">
-                  Parish: {PARISH_PHONE_DISPLAY}
-                </a>
-              </div>
+              <a
+                href={PARISH_TEL_HREF}
+                className="flex items-center gap-3 text-sm text-green-200 hover:text-green-300 transition-colors text-xs min-h-[44px] no-underline"
+                aria-label={`Call parish at ${CHURCH_PHONE}`}
+              >
+                <Phone className="h-4 w-4 flex-shrink-0 text-green-400" aria-hidden />
+                <span>Parish: {CHURCH_PHONE}</span>
+              </a>
               <div className="flex items-center gap-3 text-sm">
                 <MessageCircle className="h-4 w-4 flex-shrink-0 text-green-400" />
                 <a
-                  href={`https://wa.me/${PARISH_WHATSAPP_E164}?text=Hello%20St.%20Francis%20Cheptarit%20Parish`}
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20St.%20Francis%20Cheptarit%20Parish`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-green-200 hover:text-green-300 transition-colors text-xs"
                 >
-                  WhatsApp: {PARISH_PHONE_DISPLAY}
+                  WhatsApp: {CHURCH_PHONE}
                 </a>
               </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Mail className="h-4 w-4 flex-shrink-0 text-green-400" />
-                <a href={`mailto:${PARISH_EMAIL}`} className="text-green-200 hover:text-green-300 transition-colors text-xs break-all">{PARISH_EMAIL}</a>
-              </div>
+              <a
+                href={PARISH_MAILTO_HREF}
+                className="flex items-center gap-3 text-sm text-green-200 hover:text-green-300 transition-colors text-xs min-h-[44px] no-underline break-all"
+                aria-label={`Email ${CHURCH_EMAIL}`}
+              >
+                <Mail className="h-4 w-4 flex-shrink-0 text-green-400 mt-0.5 self-start" aria-hidden />
+                <span className="break-all">{CHURCH_EMAIL}</span>
+              </a>
               <div className="mt-3 p-3 rounded-xl border border-white/10 bg-white/5">
                 <p className="text-xs text-green-300 font-semibold mb-1">Office Hours</p>
                 <p className="text-xs text-green-200">Mon &ndash; Fri: 8:00 AM &ndash; 5:00 PM</p>

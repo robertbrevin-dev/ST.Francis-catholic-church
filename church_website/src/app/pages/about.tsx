@@ -1,7 +1,13 @@
 import { Link } from "react-router";
 import { ArrowRight, Phone, Church, Target, Star, MapPin, Building2, Globe, Mail } from "lucide-react";
 import { useScrollReveal, ScrollReveal } from "../components/scroll-reveal";
-import { PARISH_EMAIL, PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL, PARISH_POSTAL_LINES } from "../../lib/parishContact";
+import {
+  PARISH_EMAIL,
+  PARISH_PHONE_DISPLAY,
+  PARISH_MAILTO_HREF,
+  PARISH_POSTAL_LINES,
+  PARISH_TEL_HREF,
+} from "../../lib/parishContact";
 
 export function About() {
   useScrollReveal();
@@ -206,22 +212,50 @@ export function About() {
               {[
                 { icon: <MapPin className="h-5 w-5" />, label: "Address", value: PARISH_POSTAL_LINES },
                 { icon: <Building2 className="h-5 w-5" />, label: "Diocese", value: "Diocese of Kapsabet" },
-                { icon: <Phone className="h-5 w-5" />, label: "Phone", value: PARISH_PHONE_DISPLAY, href: `tel:${PARISH_PHONE_TEL}` },
-                { icon: <Mail className="h-5 w-5" />, label: "Email", value: PARISH_EMAIL, href: `mailto:${PARISH_EMAIL}` },
+                {
+                  icon: <Phone className="h-5 w-5" />,
+                  label: "Phone",
+                  value: PARISH_PHONE_DISPLAY,
+                  href: PARISH_TEL_HREF,
+                  ariaLabel: `Call parish at ${PARISH_PHONE_DISPLAY}`,
+                },
+                {
+                  icon: <Mail className="h-5 w-5" />,
+                  label: "Email",
+                  value: PARISH_EMAIL,
+                  href: PARISH_MAILTO_HREF,
+                  ariaLabel: `Email ${PARISH_EMAIL}`,
+                },
                 { icon: <Globe className="h-5 w-5" />, label: "County", value: "Nandi County, Rift Valley Region" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100">
-                  <span className="text-2xl">{item.icon}</span>
-                  <div>
-                    <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
-                    {item.href ? (
-                      <a href={item.href} className="text-gray-700 font-medium hover:text-green-700 transition-colors break-all">{item.value}</a>
-                    ) : (
-                      <p className="text-gray-700 font-medium whitespace-pre-line">{item.value}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
+              ].map((item, i) => {
+                const ico = <span className="text-2xl">{item.icon}</span>;
+                const cardClass = "flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100";
+                if (!("href" in item) || !item.href) {
+                  return (
+                    <div key={i} className={cardClass}>
+                      {ico}
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
+                        <p className="text-gray-700 font-medium whitespace-pre-line">{item.value}</p>
+                      </div>
+                    </div>
+                  );
+                }
+                return (
+                  <a
+                    key={i}
+                    href={item.href}
+                    className={`${cardClass} no-underline text-inherit hover:bg-green-100/90 active:bg-green-100 transition-colors`}
+                    {...("ariaLabel" in item && item.ariaLabel ? { "aria-label": item.ariaLabel } : {})}
+                  >
+                    {ico}
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
+                      <p className="text-gray-700 font-medium break-all whitespace-pre-line">{item.value}</p>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
             <div className="rounded-2xl overflow-hidden shadow-xl h-64 bg-green-100 flex items-center justify-center border border-green-200">
               <div className="text-center p-8">

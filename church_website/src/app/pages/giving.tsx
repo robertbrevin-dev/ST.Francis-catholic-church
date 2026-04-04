@@ -1,6 +1,6 @@
 import { Smartphone, Heart, ArrowRight, Phone, ClipboardList, Check, ShoppingBag, Building2, Banknote, Church, Handshake, BookOpen, Star, Music2, HandHeart, Hospital } from "lucide-react";
 import { Link } from "react-router";
-import { PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL, PARISH_WHATSAPP_E164 } from "../../lib/parishContact";
+import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF, PARISH_WHATSAPP_E164 } from "../../lib/parishContact";
 
 const GIVING_PURPOSES = [
   { icon:<Church className="h-8 w-8 mx-auto" />, title:"Parish Operations (Sadaka)", desc:"Weekly offertory supporting the daily running of the parish — utilities, staff, and maintenance." },
@@ -155,7 +155,7 @@ export function Giving() {
             and reach out to those in need. May God reward your generosity abundantly.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href={`tel:${PARISH_PHONE_TEL}`} className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
+            <a href={PARISH_TEL_HREF} className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
               <Phone className="h-5 w-5" /> {PARISH_PHONE_DISPLAY}
             </a>
             <Link to="/contact" className="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-semibold px-8 py-4 rounded-full hover:bg-white hover:text-green-900 transition-all">

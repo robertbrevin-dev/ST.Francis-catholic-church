@@ -312,6 +312,14 @@
 .animate-pulse-green { animation: pulseGreen 2.5s infinite; }
 .live-dot { animation: liveBlink 1.5s ease-in-out infinite; }
 
+/* Phone / email links: reliable tap → dialer or mail app on mobile */
+a[href^="tel:"],
+a[href^="mailto:"] {
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(142, 90, 61, 0.2);
+}
+
 .btn-ripple {
   position: relative;
   overflow: hidden;

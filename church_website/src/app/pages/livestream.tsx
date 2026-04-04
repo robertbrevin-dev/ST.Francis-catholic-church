@@ -1,12 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useScrollReveal } from "../components/scroll-reveal";
 import { ExternalLink, Wifi } from "lucide-react";
+import { supabase } from "../../lib/supabase";
 
-const YOUTUBE_STREAM_URL = "#";
-const FACEBOOK_STREAM_URL = "#";
-const ZOOM_MEETING_URL = "#";
-const ZOOM_MEETING_ID = "xxx xxx xxxx";
-const ZOOM_PASSCODE = "xxxxxx";
+type StreamConfig = {
+  youtube_url: string;
+  facebook_url: string;
+  zoom_meeting_url: string;
+  zoom_meeting_id: string;
+  zoom_passcode: string;
+}
 
 const YoutubeIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="h-8 w-8">
@@ -26,10 +29,57 @@ const ZoomIcon = () => (
 
 export function Livestream() {
   useScrollReveal();
+  const [streamConfig, setStreamConfig] = useState<StreamConfig>({
+    youtube_url: "#",
+    facebook_url: "#",
+    zoom_meeting_url: "#",
+    zoom_meeting_id: "xxx xxx xxxx",
+    zoom_passcode: "xxxxxx"
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.title = "Live Stream — St. Francis Cheptarit";
+    loadStreamConfig();
   }, []);
+
+  async function loadStreamConfig() {
+    try {
+      const { data, error } = await supabase
+        .from("livestream_config")
+        .select("youtube_url, facebook_url, zoom_meeting_url, zoom_meeting_id, zoom_passcode")
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error loading stream config:', error);
+      }
+
+      if (data) {
+        setStreamConfig({
+          youtube_url: data.youtube_url || "#",
+          facebook_url: data.facebook_url || "#",
+          zoom_meeting_url: data.zoom_meeting_url || "#",
+          zoom_meeting_id: data.zoom_meeting_id || "xxx xxx xxxx",
+          zoom_passcode: data.zoom_passcode || "xxxxxx"
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#f8efe2" }}>
+        <div className="text-center">
+          <Wifi className="h-12 w-12 mx-auto mb-4 text-green-700 animate-pulse" />
+          <p className="text-green-700">Loading livestream information...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -74,7 +124,7 @@ export function Livestream() {
               </div>
               <div className="p-5 bg-white">
                 <p className="text-gray-600 text-sm text-center mb-4">Watch our live Masses and access all recorded services on our YouTube channel.</p>
-                <a href={YOUTUBE_STREAM_URL} target="_blank" rel="noopener noreferrer"
+                <a href={streamConfig.youtube_url} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full text-white font-bold py-3 rounded-xl transition-all btn-ripple shadow-md"
                   style={{ background: "linear-gradient(135deg, #8d5439, #bf875f)" }}>
                   <YoutubeIcon />
@@ -93,7 +143,7 @@ export function Livestream() {
               </div>
               <div className="p-5 bg-white">
                 <p className="text-gray-600 text-sm text-center mb-4">Join us on Facebook Live for Sunday Masses and special parish celebrations and events.</p>
-                <a href={FACEBOOK_STREAM_URL} target="_blank" rel="noopener noreferrer"
+                <a href={streamConfig.facebook_url} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full text-white font-bold py-3 rounded-xl transition-all btn-ripple shadow-md"
                   style={{ background: "linear-gradient(135deg, #1877f2, #0d5ec4)" }}>
                   <FacebookIcon />
@@ -113,10 +163,10 @@ export function Livestream() {
               <div className="p-5 bg-white">
                 <p className="text-gray-600 text-sm text-center mb-4">Join interactive parish meetings, catechism sessions, and prayer gatherings via Zoom.</p>
                 <div className="bg-blue-50 rounded-xl p-3 mb-3 border border-blue-100">
-                  <p className="text-xs text-blue-700 font-semibold">Meeting ID: <span className="font-bold">{ZOOM_MEETING_ID}</span></p>
-                  <p className="text-xs text-blue-700 font-semibold">Passcode: <span className="font-bold">{ZOOM_PASSCODE}</span></p>
+                  <p className="text-xs text-blue-700 font-semibold">Meeting ID: <span className="font-bold">{streamConfig.zoom_meeting_id}</span></p>
+                  <p className="text-xs text-blue-700 font-semibold">Passcode: <span className="font-bold">{streamConfig.zoom_passcode}</span></p>
                 </div>
-                <a href={ZOOM_MEETING_URL} target="_blank" rel="noopener noreferrer"
+                <a href={streamConfig.zoom_meeting_url} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full text-white font-bold py-3 rounded-xl transition-all btn-ripple shadow-md"
                   style={{ background: "linear-gradient(135deg, #2d8cff, #0e72eb)" }}>
                   <ZoomIcon />
@@ -170,8 +220,8 @@ export function Livestream() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
-              { href: YOUTUBE_STREAM_URL, label: "Subscribe on YouTube", bg: "#8d5439", Icon: YoutubeIcon },
-              { href: FACEBOOK_STREAM_URL, label: "Follow on Facebook", bg: "#1877f2", Icon: FacebookIcon },
+              { href: streamConfig.youtube_url, label: "Subscribe on YouTube", bg: "#8d5439", Icon: YoutubeIcon },
+              { href: streamConfig.facebook_url, label: "Follow on Facebook", bg: "#1877f2", Icon: FacebookIcon },
             ].map(({ href, label, bg, Icon }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-full transition-all btn-ripple shadow-md touch-card"

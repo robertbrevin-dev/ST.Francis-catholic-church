@@ -4,8 +4,9 @@ import { useScrollReveal, ScrollReveal } from "../components/scroll-reveal";
 import {
   PARISH_EMAIL,
   PARISH_PHONE_DISPLAY,
-  PARISH_PHONE_TEL,
+  PARISH_MAILTO_HREF,
   PARISH_POSTAL_LINES,
+  PARISH_TEL_HREF,
   PARISH_WHATSAPP_E164,
 } from "../../lib/parishContact";
 
@@ -49,32 +50,65 @@ export function Contact() {
               <h2 className="text-2xl font-bold text-green-900 mb-6">Get In Touch</h2>
               <div className="space-y-4 mb-8">
                 {[
-                  { icon: <MapPin className="h-5 w-5" />, label:"Address", value: PARISH_POSTAL_LINES },
-                  { icon: <Phone className="h-5 w-5" />, label:"Parish phone", value: PARISH_PHONE_DISPLAY, href:`tel:${PARISH_PHONE_TEL}` },
-                  { icon: <MessageCircle className="h-5 w-5" />, label:"WhatsApp", value: PARISH_PHONE_DISPLAY, href:`https://wa.me/${PARISH_WHATSAPP_E164}` },
-                  { icon: <Mail className="h-5 w-5" />, label:"Email", value: PARISH_EMAIL, href:`mailto:${PARISH_EMAIL}` },
-                  { icon: <Clock className="h-5 w-5" />, label:"Office Hours", value:"Mon–Fri: 8:00 AM – 5:00 PM\nSaturday: 9:00 AM – 12:00 PM" },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100">
+                  { icon: <MapPin className="h-5 w-5" />, label: "Address", value: PARISH_POSTAL_LINES },
+                  {
+                    icon: <Phone className="h-5 w-5" />,
+                    label: "Parish phone",
+                    value: PARISH_PHONE_DISPLAY,
+                    href: PARISH_TEL_HREF,
+                    ariaLabel: `Call parish at ${PARISH_PHONE_DISPLAY}`,
+                  },
+                  {
+                    icon: <MessageCircle className="h-5 w-5" />,
+                    label: "WhatsApp",
+                    value: PARISH_PHONE_DISPLAY,
+                    href: `https://wa.me/${PARISH_WHATSAPP_E164}`,
+                    external: true,
+                  },
+                  {
+                    icon: <Mail className="h-5 w-5" />,
+                    label: "Email",
+                    value: PARISH_EMAIL,
+                    href: PARISH_MAILTO_HREF,
+                    ariaLabel: `Email ${PARISH_EMAIL}`,
+                  },
+                  { icon: <Clock className="h-5 w-5" />, label: "Office Hours", value: "Mon–Fri: 8:00 AM – 5:00 PM\nSaturday: 9:00 AM – 12:00 PM" },
+                ].map((item, i) => {
+                  const bubble = (
                     <div className="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center flex-shrink-0">
                       {item.icon}
                     </div>
-                    <div>
-                      <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
-                      {item.href ? (
-                        <a
-                          href={item.href}
-                          className="text-gray-700 hover:text-green-700 transition-colors whitespace-pre-line"
-                          {...(item.href.startsWith("https://wa.me") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                        >
-                          {item.value}
-                        </a>
-                      ) : (
+                  );
+                  const cardClass =
+                    "flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100";
+                  if (!("href" in item) || !item.href) {
+                    return (
+                      <div key={i} className={cardClass}>
+                        {bubble}
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
+                          <p className="text-gray-700 whitespace-pre-line">{item.value}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                  const isExternal = "external" in item && item.external;
+                  return (
+                    <a
+                      key={i}
+                      href={item.href}
+                      className={`${cardClass} no-underline text-inherit hover:bg-green-100/90 active:bg-green-100 transition-colors`}
+                      {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      {...("ariaLabel" in item && item.ariaLabel ? { "aria-label": item.ariaLabel } : {})}
+                    >
+                      {bubble}
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-green-700 uppercase tracking-wider mb-0.5">{item.label}</p>
                         <p className="text-gray-700 whitespace-pre-line">{item.value}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
 
               {/* WhatsApp Quick Contact */}
@@ -147,7 +181,7 @@ export function Contact() {
               If you or a loved one urgently needs a priest — for Last Rites, Anointing of the Sick, or any pastoral emergency — 
               please call the parish phone immediately at any time of day or night.
             </p>
-            <a href={`tel:${PARISH_PHONE_TEL}`} className="inline-flex items-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-full hover:bg-red-700 transition-all">
+            <a href={PARISH_TEL_HREF} className="inline-flex items-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-full hover:bg-red-700 transition-all">
               <Phone className="h-4 w-4" /> Emergency: {PARISH_PHONE_DISPLAY}
             </a>
           </div>

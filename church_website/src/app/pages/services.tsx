@@ -1,8 +1,49 @@
-import { Phone, Church, HandHelping, Droplet, Sparkles, Cross, Handshake, HandHeart, ShieldCheck, BookOpen, Lightbulb } from "lucide-react";
-import { Link } from "react-router";
-import { PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL } from "../../lib/parishContact";
+import { useEffect, useState, type ReactNode } from "react"
+import { Phone, Church, HandHelping, Droplet, Sparkles, Cross, Handshake, HandHeart, ShieldCheck, BookOpen, Lightbulb } from "lucide-react"
+import { Link } from "react-router"
+import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF } from "../../lib/parishContact"
+import { supabase } from "../../lib/supabase"
 
-const SERVICES = [
+type ScheduleRow = { day: string; times: string[] }
+
+const SERVICE_ICONS: Record<string, ReactNode> = {
+  mass: <Church className="h-7 w-7" />,
+  confession: <HandHelping className="h-7 w-7" />,
+  baptism: <Droplet className="h-7 w-7" />,
+  confirmation: <Sparkles className="h-7 w-7" />,
+  "first-communion": <Cross className="h-7 w-7" />,
+  marriage: <Handshake className="h-7 w-7" />,
+  anointing: <HandHeart className="h-7 w-7" />,
+  funeral: <ShieldCheck className="h-7 w-7" />,
+  catechism: <BookOpen className="h-7 w-7" />,
+  blessings: <Sparkles className="h-7 w-7" />,
+}
+
+type DbService = {
+  id: string
+  slug: string
+  title: string
+  subtitle: string
+  description: string
+  schedule: unknown
+  note: string
+  color: string
+}
+
+function normalizeSchedule(raw: unknown): ScheduleRow[] {
+  if (!Array.isArray(raw)) return []
+  return raw
+    .map((row) => {
+      if (!row || typeof row !== "object") return null
+      const r = row as { day?: unknown; times?: unknown }
+      const day = typeof r.day === "string" ? r.day : ""
+      const times = Array.isArray(r.times) ? r.times.filter((t): t is string => typeof t === "string") : []
+      return day ? { day, times } : null
+    })
+    .filter((x): x is ScheduleRow => x !== null)
+}
+
+const FALLBACK_SERVICES = [
   {
     id: "mass",
     icon: <Church className="h-7 w-7" />,
@@ -158,9 +199,59 @@ const SERVICES = [
     color: "#f57f17",
     bg: "#f3e4db",
   },
-];
+]
 
 export function Services() {
+  const [dbRows, setDbRows] = useState<DbService[] | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .eq("is_active", true)
+        .order("title", { ascending: true })
+      if (cancelled) return
+      if (error || !data?.length) {
+        setDbRows(null)
+        return
+      }
+      setDbRows(data as DbService[])
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const displayList =
+    dbRows && dbRows.length > 0
+      ? dbRows.map((row) => {
+          const color = row.color || "#7c4c2e"
+          return {
+            key: row.id,
+            icon: SERVICE_ICONS[row.slug] ?? <Cross className="h-7 w-7" />,
+            title: row.title,
+            subtitle: row.subtitle,
+            description: row.description,
+            schedule: normalizeSchedule(row.schedule),
+            note: row.note || "",
+            color,
+            bg: `${color}18`,
+          }
+        })
+      : FALLBACK_SERVICES.map((s) => ({
+          key: s.id,
+          icon: s.icon,
+          title: s.title,
+          subtitle: s.subtitle,
+          description: s.description,
+          schedule: s.schedule,
+          note: s.note,
+          color: s.color,
+          bg: s.bg,
+        }))
+
   return (
     <div>
       {/* Header */}
@@ -193,8 +284,8 @@ export function Services() {
       <section className="py-10 px-4" style={{ background: "#f8efe2" }}>
         <div className="container mx-auto max-w-6xl">
           <div className="space-y-6">
-            {SERVICES.map((s, i) => (
-              <div key={s.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-green-100 hover:shadow-lg transition-all">
+            {displayList.map((s) => (
+              <div key={s.key} className="bg-white rounded-2xl shadow-md overflow-hidden border border-green-100 hover:shadow-lg transition-all">
                 <div className="grid md:grid-cols-3">
                   {/* Left: Icon + Title */}
                   <div
@@ -220,14 +311,18 @@ export function Services() {
                   <div className="p-6" style={{ background: s.bg }}>
                     <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: s.color }}>Schedule</p>
                     <div className="space-y-3">
-                      {s.schedule.map((sch, j) => (
-                        <div key={j} className="border-l-2 pl-3" style={{ borderColor: s.color }}>
-                          <p className="font-semibold text-sm text-gray-800">{sch.day}</p>
-                          {sch.times.map((t, k) => (
-                            <p key={k} className="text-xs text-gray-600">{t}</p>
-                          ))}
-                        </div>
-                      ))}
+                      {s.schedule.length > 0 ? (
+                        s.schedule.map((sch, j) => (
+                          <div key={j} className="border-l-2 pl-3" style={{ borderColor: s.color }}>
+                            <p className="font-semibold text-sm text-gray-800">{sch.day}</p>
+                            {sch.times.map((t, k) => (
+                              <p key={k} className="text-xs text-gray-600">{t}</p>
+                            ))}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-xs text-gray-500">See parish office for times.</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -249,7 +344,7 @@ export function Services() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href={`tel:${PARISH_PHONE_TEL}`}
+              href={PARISH_TEL_HREF}
               className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg"
             >
               <Phone className="h-5 w-5" />

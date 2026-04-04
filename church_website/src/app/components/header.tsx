@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import { Menu, X, Phone, MessageCircle } from "lucide-react";
-import { PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL, PARISH_WHATSAPP_E164 } from "../../lib/parishContact";
+import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF, PARISH_WHATSAPP_E164 } from "../../lib/parishContact";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ export function Header() {
       <div className="hidden md:flex items-center justify-between px-6 py-1.5 text-xs text-white/80" style={{ background: "#321d11" }}>
         <span className="opacity-70">St. Francis Cheptarit Catholic Parish &mdash; Mosoriot, Nandi County, Kenya &bull; Diocese of Kapsabet</span>
         <div className="flex items-center gap-5">
-          <a href={`tel:${PARISH_PHONE_TEL}`} className="flex items-center gap-1.5 hover:text-green-300 transition-colors">
+          <a href={PARISH_TEL_HREF} className="flex items-center gap-1.5 hover:text-green-300 transition-colors py-1 px-1 -mx-1 rounded min-h-[44px] sm:min-h-0 sm:py-0 sm:px-0 sm:mx-0">
             <Phone className="h-3 w-3" /> {PARISH_PHONE_DISPLAY}
           </a>
           <a href={`https://wa.me/${PARISH_WHATSAPP_E164}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-green-300 transition-colors">
@@ -62,7 +62,7 @@ export function Header() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <a href={`tel:${PARISH_PHONE_TEL}`}
+              <a href={PARISH_TEL_HREF}
                 className="hidden md:flex items-center gap-2 font-semibold px-4 py-2 rounded-full text-sm transition-all shadow-md btn-ripple"
                 style={{ background: "#7c2d12", color: "white" }}>
                 <Phone className="h-4 w-4" /> Call
@@ -86,7 +86,7 @@ export function Header() {
                   </Link>
                 ))}
               </div>
-              <a href={`tel:${PARISH_PHONE_TEL}`}
+              <a href={PARISH_TEL_HREF}
                 className="flex items-center justify-center gap-2 text-white font-semibold px-4 py-3 rounded-xl text-sm"
                 style={{ background: "#8d5439" }}>
                 <Phone className="h-4 w-4" /> {PARISH_PHONE_DISPLAY}

@@ -1,6 +1,8 @@
-import { Phone, Users, Music, BookOpen, Heart, Cross, Mic2, GraduationCap, Home, HandHeart, Church } from "lucide-react";
+import { useEffect, useState } from "react"
+import { Phone, Users, Music, BookOpen, Heart, Cross, Mic2, GraduationCap, Home, HandHeart, Church } from "lucide-react"
 
-import { PARISH_PHONE_DISPLAY, PARISH_PHONE_TEL } from "../../lib/parishContact";
+import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF } from "../../lib/parishContact"
+import { supabase } from "../../lib/supabase"
 
 const MenIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
@@ -37,7 +39,40 @@ const AltarIcon = () => (
   </svg>
 );
 
-const MINISTRIES = [
+type MinistryIcon = React.ComponentType<{ className?: string }>
+const MINISTRY_ICONS: Record<string, MinistryIcon> = {
+  cma: MenIcon,
+  cwa: WomenIcon,
+  youth: Users,
+  pmc: DoveIcon,
+  choir: Music,
+  csa: GraduationCap,
+  catechism: BookOpen,
+  "altar-servers": AltarIcon,
+  scc: CommunityIcon,
+  eucharistic: CrossSVG,
+  lectors: BookOpen,
+  svdp: HandHeart,
+}
+
+type DbMinistry = {
+  id: string
+  slug: string
+  title: string
+  subtitle: string
+  description: string
+  activities: unknown
+  meets: string
+  contact_info: string
+  color: string
+}
+
+function normalizeActivities(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return []
+  return raw.filter((x): x is string => typeof x === "string")
+}
+
+const FALLBACK_MINISTRIES = [
   { id:"cma", Icon: MenIcon, title:"Catholic Men Association (CMA)", subtitle:"Faith · Brotherhood · Leadership", description:"The Catholic Men Association brings together men of the parish to deepen their faith, support one another in Christian brotherhood, and serve the community with integrity.", activities:["Monthly meetings and prayers","Family life seminars","Community service projects","Annual retreats and recollections","Support for parish development"], meets:"Monthly – as announced", contact:"Speak to the Parish Priest", color:"#7c4c2e", bg:"#eaf7ee" },
   { id:"cwa", Icon: WomenIcon, title:"Catholic Women Association (CWA)", subtitle:"Faith · Service · Solidarity", description:"The Catholic Women Association unites women of the parish in faith, prayer, and service. CWA members support one another, engage in charitable activities, and mentor young women.", activities:["Weekly prayer and fellowship","Charitable works and fundraising","Mentoring young women","Hospital and home visits","Annual women's day celebrations"], meets:"Every 2nd Saturday at 10:00 AM", contact:"Contact the Parish Office", color:"#880e4f", bg:"#fce4ec" },
   { id:"youth", Icon: Users, title:"Youth Ministry", subtitle:"Faith · Fun · Future", description:"Our Youth Ministry gathers young people from the parish to grow together in Catholic faith, fellowship and service. The youth are the future of the Church.", activities:["Weekly youth meetings","Faith formation & catechesis","Sports and recreational activities","Youth camps and retreats","Community service and charity"], meets:"Every Saturday at 3:00 PM", contact:"Contact the Parish Priest", color:"#e65100", bg:"#fff3e0" },
@@ -50,9 +85,62 @@ const MINISTRIES = [
   { id:"eucharistic", Icon: CrossSVG, title:"Eucharistic Ministers", subtitle:"Service · Communion · Care", description:"Extraordinary Ministers of Holy Communion assist in distributing Communion during Mass and to the sick and homebound. This ministry requires commissioning.", activities:["Distribute Holy Communion at Mass","Bring Communion to the sick","Spiritual formation and training"], meets:"As scheduled", contact:"Contact the Parish Priest", color:"#7c4c2e", bg:"#eaf7ee" },
   { id:"lectors", Icon: BookOpen, title:"Lectors Ministry", subtitle:"Word · Proclamation · Service", description:"Lectors proclaim the Word of God during Mass from the Scriptures. Open to all parishioners willing to be trained and commit to serving at Mass.", activities:["Read Scripture at Mass","Training and formation","Ministry scheduling"], meets:"As scheduled", contact:"Contact the Parish Office", color:"#4a148c", bg:"#f3e5f5" },
   { id:"svdp", Icon: HandHeart, title:"St. Vincent de Paul Society", subtitle:"Charity · Service · Compassion", description:"The St. Vincent de Paul Society serves people in need in our community, offering material and moral support through home visits, food assistance, and help for the vulnerable.", activities:["Home visits to the poor","Food and material assistance","Hospital visitation","Monthly meetings and charity drives"], meets:"Monthly – as announced", contact:"Contact the Parish Office", color:"#1565c0", bg:"#e3f2fd" },
-];
+]
 
 export function Ministries() {
+  const [dbRows, setDbRows] = useState<DbMinistry[] | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      const { data, error } = await supabase
+        .from("ministries")
+        .select("*")
+        .eq("is_active", true)
+        .order("title", { ascending: true })
+      if (cancelled) return
+      if (error || !data?.length) {
+        setDbRows(null)
+        return
+      }
+      setDbRows(data as DbMinistry[])
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const displayList =
+    dbRows && dbRows.length > 0
+      ? dbRows.map((m) => {
+      const color = m.color || "#7c4c2e"
+      const Icon = MINISTRY_ICONS[m.slug] || Users
+      return {
+        key: m.id,
+        Icon,
+        title: m.title,
+        subtitle: m.subtitle,
+        description: m.description,
+        activities: normalizeActivities(m.activities),
+        meets: m.meets || "—",
+        contact: m.contact_info || "",
+        color,
+        bg: `${color}22`,
+      }
+    })
+      : FALLBACK_MINISTRIES.map((m) => ({
+      key: m.id,
+      Icon: m.Icon,
+      title: m.title,
+      subtitle: m.subtitle,
+      description: m.description,
+      activities: m.activities,
+      meets: m.meets,
+      contact: m.contact,
+      color: m.color,
+      bg: m.bg,
+    }))
+
   return (
     <div>
       <section className="py-20 px-4 text-white relative overflow-hidden" style={{ background: "linear-gradient(135deg, #3a1f13 0%, #7c4c2e 100%)" }}>
@@ -85,10 +173,10 @@ export function Ministries() {
       <section className="py-12 px-4" style={{ background: "#f8efe2" }}>
         <div className="container mx-auto max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {MINISTRIES.map((m) => {
-              const { Icon } = m;
+            {displayList.map((m) => {
+              const { Icon } = m
               return (
-                <div key={m.id} className="ministry-card bg-white rounded-2xl shadow-md overflow-hidden border border-green-100">
+                <div key={m.key} className="ministry-card bg-white rounded-2xl shadow-md overflow-hidden border border-green-100">
                   <div className="p-5 text-white flex items-center gap-3" style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}>
                     <div className="opacity-90"><Icon /></div>
                     <div>
@@ -114,7 +202,7 @@ export function Ministries() {
                     </div>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
@@ -124,7 +212,7 @@ export function Ministries() {
         <div className="container mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold mb-4">Want to Get Involved?</h2>
           <p className="text-green-200 mb-8 leading-relaxed">Speak to the Parish Priest, contact the parish office, or approach any ministry coordinator after Mass. You are always welcome.</p>
-          <a href={`tel:${PARISH_PHONE_TEL}`} className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
+          <a href={PARISH_TEL_HREF} className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-green-950 font-bold px-8 py-4 rounded-full transition-all shadow-lg">
             <Phone className="h-5 w-5" /> Call: {PARISH_PHONE_DISPLAY}
           </a>
         </div>
