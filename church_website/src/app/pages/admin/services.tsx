@@ -60,30 +60,41 @@ export function AdminServices() {
   async function save() {
     if (!form.title.trim() || !form.description.trim()) return
     setSaving(true)
-    const schedule = parseScheduleText(form.schedule_text)
-    const payload = {
-      slug: form.slug,
-      title: form.title,
-      subtitle: form.subtitle,
-      description: form.description,
-      note: form.note,
-      color: form.color,
-      schedule,
-      is_active: true,
-      updated_by: profile?.id,
-      updated_at: new Date().toISOString(),
+    try {
+      const schedule = parseScheduleText(form.schedule_text)
+      const payload = {
+        slug: form.slug,
+        title: form.title,
+        subtitle: form.subtitle,
+        description: form.description,
+        note: form.note,
+        color: form.color,
+        schedule,
+        is_active: true,
+        updated_by: profile?.id,
+        updated_at: new Date().toISOString(),
+      }
+      if (editing) {
+        const { error } = await supabase.from("services").update(payload).eq("id", editing.id)
+        if (error) {
+          notify(error.message, false)
+          return
+        }
+        setEditing(null)
+        notify("Updated.")
+      } else {
+        const { error } = await supabase.from("services").insert(payload)
+        if (error) {
+          notify(error.message, false)
+          return
+        }
+        notify("Sacrament added.")
+      }
+      setForm({ slug: "", title: "", subtitle: "", description: "", note: "", schedule_text: "", color: "#7c4c2e" })
+      void load()
+    } finally {
+      setSaving(false)
     }
-    if (editing) {
-      await supabase.from("services").update(payload).eq("id", editing.id)
-      setEditing(null)
-      notify("Updated.")
-    } else {
-      await supabase.from("services").insert(payload)
-      notify("Sacrament added.")
-    }
-    setForm({ slug: "", title: "", subtitle: "", description: "", note: "", schedule_text: "", color: "#7c4c2e" })
-    load()
-    setSaving(false)
   }
   async function toggleActive(id: string, v: boolean) {
     await supabase.from("services").update({ is_active: !v }).eq("id", id)

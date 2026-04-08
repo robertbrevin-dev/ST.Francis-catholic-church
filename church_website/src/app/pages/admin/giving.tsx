@@ -38,17 +38,31 @@ export function AdminGiving() {
   async function savePurpose() {
     if (!form.title.trim() || !form.description.trim()) return
     setSaving(true)
-    if (editing) {
-      await supabase.from("giving_purposes").update({ ...form, updated_by: profile?.id, updated_at: new Date().toISOString() }).eq("id", editing.id)
-      setEditing(null)
-      notify("Updated.")
-    } else {
-      await supabase.from("giving_purposes").insert({ ...form, is_active: true, updated_by: profile?.id })
-      notify("Purpose added.")
+    try {
+      if (editing) {
+        const { error } = await supabase
+          .from("giving_purposes")
+          .update({ ...form, updated_by: profile?.id, updated_at: new Date().toISOString() })
+          .eq("id", editing.id)
+        if (error) {
+          notify(error.message, false)
+          return
+        }
+        setEditing(null)
+        notify("Updated.")
+      } else {
+        const { error } = await supabase.from("giving_purposes").insert({ ...form, is_active: true, updated_by: profile?.id })
+        if (error) {
+          notify(error.message, false)
+          return
+        }
+        notify("Purpose added.")
+      }
+      setForm({ title: "", description: "", display_order: 0 })
+      void loadAll()
+    } finally {
+      setSaving(false)
     }
-    setForm({ title: "", description: "", display_order: 0 })
-    loadAll()
-    setSaving(false)
   }
   async function saveSetting(key: string) {
     await supabase.from("parish_settings").update({ value: svals[key], updated_by: profile?.id, updated_at: new Date().toISOString() }).eq("key", key)

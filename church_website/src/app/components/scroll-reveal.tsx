@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 export interface ScrollRevealProps {
   children: React.ReactNode;
@@ -20,7 +20,6 @@ export function useScrollReveal() {
             if (delay) {
               (entry.target as HTMLElement).style.transitionDelay = delay;
             }
-            // Stagger animation for children
             if ((entry.target as HTMLElement).classList.contains("stagger-children")) {
               const children = (entry.target as HTMLElement).querySelectorAll(".stagger-item");
               children.forEach((child, idx) => {
@@ -88,15 +87,17 @@ export function StaggerContainer({
   );
 }
 
-export function StaggerItem({ 
-  children, 
-  className = "" 
-}: { 
-  children: React.ReactNode; 
+export function StaggerItem({
+  children,
+  className = "",
+  style,
+}: {
+  children: React.ReactNode;
   className?: string;
+  style?: CSSProperties;
 }) {
   return (
-    <div className={`stagger-item reveal ${className}`}>
+    <div className={`stagger-item reveal ${className}`} style={style}>
       {children}
     </div>
   );

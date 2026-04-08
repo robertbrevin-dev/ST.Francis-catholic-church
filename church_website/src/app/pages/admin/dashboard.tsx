@@ -6,6 +6,7 @@ const SECTIONS = [
   { title: "Mass schedule", desc: "Update daily and Sunday Mass times", path: "/admin/mass-times", color: "#2e7d32" },
   { title: "Confessions", desc: "Update Reconciliation schedule", path: "/admin/confessions", color: "#6a1b9a" },
   { title: "Events", desc: "Create and manage parish events", path: "/admin/events", color: "#1565c0" },
+  { title: "About stories", desc: "Upload About page photos and occasion details", path: "/admin/about", color: "#8d5439" },
   { title: "Ministries", desc: "Edit ministry descriptions and times", path: "/admin/ministries", color: "#2e7d32" },
   { title: "Sacraments", desc: "Update sacrament schedules", path: "/admin/services", color: "#bf360c" },
   { title: "Giving / Sadaka", desc: "Update M-PESA and michango info", path: "/admin/giving", color: "#c8a84b" },
@@ -22,7 +23,7 @@ export function AdminDashboard() {
       <div className="admin-welcome">
         <div className="admin-welcome-card">
           <h2>Good day, {profile?.display_name ?? "administrator"}</h2>
-          <p>St. Francis Cheptarit Catholic Parish · Diocese of Kapsabet</p>
+          <p>St. Francis Cheptarit Catholic Parish ï¿½ Diocese of Kapsabet</p>
         </div>
       </div>
       <p className="admin-section-label">Content management</p>

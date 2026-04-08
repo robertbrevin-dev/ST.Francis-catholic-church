@@ -8,6 +8,7 @@ const NAV = [
   { to: "/admin/mass-times", label: "Mass schedule" },
   { to: "/admin/confessions", label: "Confessions" },
   { to: "/admin/events", label: "Events" },
+  { to: "/admin/about", label: "About stories" },
   { to: "/admin/ministries", label: "Ministries" },
   { to: "/admin/services", label: "Sacraments" },
   { to: "/admin/giving", label: "Giving / Sadaka" },
@@ -35,6 +36,10 @@ const PAGE_META: Record<string, { title: string; subtitle: string }> = {
   "/admin/events": {
     title: "Events",
     subtitle: "Create and manage parish events.",
+  },
+  "/admin/about": {
+    title: "About stories",
+    subtitle: "Upload event photos and tell the story behind each occasion on the About page.",
   },
   "/admin/ministries": {
     title: "Ministries",

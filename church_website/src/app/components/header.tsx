@@ -41,7 +41,7 @@ export function Header() {
           <div className="flex items-center justify-between h-20">
             <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
               <div className="h-14 w-14 rounded-full overflow-hidden border-2 shadow-lg flex-shrink-0" style={{ borderColor: "#8d5439" }}>
-                <img src="/images/logo_color.jpeg" alt="St. Francis Cheptarit Logo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/images/logo.jpeg"; }} />
+                <img src="/images/church.jpg" alt="St. Francis Cheptarit Logo" className="h-full w-full object-cover" />
               </div>
               <div className="flex flex-col leading-tight">
                 <span className="text-white font-bold text-lg">St. Francis Cheptarit</span>

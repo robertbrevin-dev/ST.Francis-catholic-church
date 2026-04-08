@@ -23,6 +23,7 @@ import { AdminLivestream } from "./pages/admin/livestream"
 import { AdminSettings } from "./pages/admin/settings"
 import { AdminMinistries } from "./pages/admin/ministries"
 import { AdminServices } from "./pages/admin/services"
+import { AdminAboutStories } from "./pages/admin/about"
 
 export const router = createBrowserRouter([
   { path: "/", Component: Layout, children: [
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
       { path: "mass-times", Component: AdminMassTimes },
       { path: "confessions", Component: AdminConfessions },
       { path: "events", Component: AdminEvents },
+      { path: "about", Component: AdminAboutStories },
       { path: "giving", Component: AdminGiving },
       { path: "livestream", Component: AdminLivestream },
       { path: "ministries", Component: AdminMinistries },

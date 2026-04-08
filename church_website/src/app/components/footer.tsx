@@ -69,7 +69,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="h-14 w-14 rounded-full overflow-hidden border-2 shadow-lg flex-shrink-0" style={{ borderColor: "#8d5439" }}>
-                <img src="/images/logo_color.jpeg" alt="Logo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/images/logo.jpeg"; }} />
+                <img src="/images/church.jpg" alt="Logo" className="h-full w-full object-cover" />
               </div>
               <div>
                 <h3 className="font-bold text-white">St. Francis Cheptarit</h3>

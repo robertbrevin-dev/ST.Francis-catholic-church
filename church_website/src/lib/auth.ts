@@ -25,7 +25,6 @@ export async function signOut() {
     localStorage.removeItem("parish_admin_profile")
     localStorage.removeItem(SUPABASE_AUTH_STORAGE_KEY)
   } catch {
-    /* ignore */
   }
 
   const remoteSignOut = supabase.auth.signOut({ scope: "local" }).catch(() => undefined)

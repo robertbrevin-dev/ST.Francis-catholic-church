@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Calendar, Clock, Phone, ArrowRight, Bell, ChevronRight, Smartphone, MapPin, Heart, Users, BookOpen } from "lucide-react";
-import { useScrollReveal, ScrollReveal, StaggerContainer, StaggerItem, AnimatedBg } from "../components/scroll-reveal";
+import { useScrollReveal, ScrollReveal, StaggerContainer, StaggerItem } from "../components/scroll-reveal";
 import { CHURCH_PHONE, PARISH_TEL_HREF, WHATSAPP_NUMBER } from "../../lib/parishContact";
+import { fetchUsccbDailyReading, type DailyReadingDisplay } from "../../lib/usccbDailyReading";
 
 const LIVE_ANNOUNCEMENTS = [
   "Welcome to St. Francis Cheptarit Catholic Parish — Mosoriot, Nandi County",
@@ -28,120 +29,14 @@ const MINISTRIES_PREVIEW = [
   { name: "CSA", description: "Catholic Students Association — faith formation for students" },
 ];
 
-const LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "sw", label: "Kiswahili" },
-  { code: "ke", label: "Kalenjin" },
-];
-
-const CATHOLIC_LITURGICAL_READINGS = {
-  advent: [
-    { reference: "Isaiah 9:6", versions: { en: "For to us a child is born.", sw: "Mtoto ametwewa kwetu.", ke: "Atet ko kenyu..." } },
-    { reference: "Isaiah 40:3", versions: { en: "Prepare the way of the Lord.", sw: "Tayari njia ya Bwana.", ke: "Nging che Atei..." } },
-    { reference: "Matthew 3:1-2", versions: { en: "Repent, for the kingdom of heaven is at hand.", sw: "Tubadilike, ufalme umekaribia.", ke: "Toben, koit ne uka..." } },
-    { reference: "Psalm 85:8", versions: { en: "Let me hear what God will speak.", sw: "Nisikie Bwana aseme.", ke: "Kok konit ne Atei..." } },
-    { reference: "Luke 1:37", versions: { en: "Nothing is impossible with God.", sw: "Hakuna yasiyowezekana kwa Mungu.", ke: "Koito ne Atei..." } },
-    { reference: "Philippians 4:4", versions: { en: "Rejoice in the Lord always.", sw: "Furahini daima katika Bwana.", ke: "Kusoik ne Atei..." } },
-    { reference: "John 1:14", versions: { en: "The Word became flesh and dwelt among us.", sw: "Neno likawa mwili.", ke: "Neno ngongen..." } },
-  ],
-  christmas: [
-    { reference: "Luke 2:11", versions: { en: "Today a Savior is born for you.", sw: "Leo Mkombozi amezaliwa kwenu.", ke: "Omukor kochir..." } },
-    { reference: "John 1:14", versions: { en: "The Word became flesh.", sw: "Neno likawa mwili.", ke: "Neno ngo ngon..." } },
-    { reference: "Matthew 2:10", versions: { en: "They rejoiced with great joy.", sw: "Walifurahi kwa furaha.", ke: "Kokido ne kerer..." } },
-    { reference: "Psalm 96:11", versions: { en: "Let heavens rejoice.", sw: "Mbingu zishangilie.", ke: "Megat miw..." } },
-    { reference: "Isaiah 7:14", versions: { en: "A virgin shall conceive.", sw: "Bikira atapata mimba.", ke: "Bikra ke rest..." } },
-    { reference: "Luke 2:14", versions: { en: "Glory to God in the highest.", sw: "Utukufu kwa Mungu juu sana.", ke: "Naitet ne Atei..." } },
-    { reference: "Psalm 98:4", versions: { en: "Make a joyful noise.", sw: "Fanya sauti ya furaha.", ke: "Kor koirir..." } },
-  ],
-  lent: [
-    { reference: "Joel 2:12", versions: { en: "Return to Me with all your heart.", sw: "Rudi kwangu kwa moyo wako wote.", ke: "Pumen ko Atei..." } },
-    { reference: "Psalm 51:10", versions: { en: "Create in me a clean heart.", sw: "Nitengenezee moyo safi.", ke: "Kobet koi ne kulo..." } },
-    { reference: "Matthew 6:16", versions: { en: "When you fast, do not look sad.", sw: "Usije ukanyamaza kwa huzuni.", ke: "Kobo ne chite..." } },
-    { reference: "Romans 5:8", versions: { en: "God shows His love while we were sinners.", sw: "Mungu alituonyesha upendo hata tulikuwa watakatifu.", ke: "Atei akoyu neik..." } },
-    { reference: "2 Corinthians 5:17", versions: { en: "Anyone in Christ is a new creation.", sw: "Mtoto katika Kristo ni miumbe mpya.", ke: "Omo ko Ukwat..." } },
-    { reference: "Hebrews 4:16", versions: { en: "Approach the throne of grace.", sw: "Karibuni kwa kiti cha neema.", ke: "Kotik ka ngai..." } },
-    { reference: "Luke 9:23", versions: { en: "Deny yourself and take up your cross.", sw: "Jinyenyekeze na ukabidhi msalaba.", ke: "Noyongit ne karys..." } },
-  ],
-  easter: [
-    { reference: "Matthew 28:6", versions: { en: "He is risen.", sw: "Amefufuka.", ke: "Akei amut..." } },
-    { reference: "John 11:25", versions: { en: "I am the resurrection and the life.", sw: "Mimi ndimi ufufuo na uzima.", ke: "Anei ne fungayik..." } },
-    { reference: "Acts 2:24", versions: { en: "God raised Him up.", sw: "Mungu alimfufua.", ke: "Atei akom fuf..." } },
-    { reference: "Romans 6:4", versions: { en: "Walk in newness of life.", sw: "Tembea katika uzima mpya.", ke: "Noyai ne utet..." } },
-    { reference: "1 Peter 1:3", versions: { en: "Born again to a living hope.", sw: "Tumezaliwa upya kwa tumaini hai.", ke: "Teteiamet nek..." } },
-    { reference: "Revelation 1:18", versions: { en: "I am alive forever.", sw: "Niko hai milele.", ke: "Nae neun che..." } },
-    { reference: "Luke 24:32", versions: { en: "Hearts burned within us.", sw: "Mioyo iliwaka ndani yetu.", ke: "Kok abot..." } },
-  ],
-  ordinary: [
-    { reference: "Psalm 23:1", versions: { en: "The Lord is my shepherd.", sw: "Bwana ndiye mchungaji wangu.", ke: "Atei ko aror..." } },
-    { reference: "Philippians 4:13", versions: { en: "I can do all things through Christ.", sw: "Ninaweza mambo yote kwa Kristo.", ke: "Keito ne Ukwat..." } },
-    { reference: "Matthew 5:14", versions: { en: "You are the light of the world.", sw: "Ninyi ni nuru ya dunia.", ke: "Abei ne ngaim..." } },
-    { reference: "John 8:12", versions: { en: "I am the light of the world.", sw: "Mimi ndimi nuru ya dunia.", ke: "Anei ne ngaim..." } },
-    { reference: "Psalm 46:10", versions: { en: "Be still, and know that I am God.", sw: "Tulieni, na mjue mimi ni Mungu.", ke: "Noombor, neget Atei..." } },
-    { reference: "Romans 12:2", versions: { en: "Be transformed by the renewal of your mind.", sw: "Geukieni kwa uumbaji mpya wa akili zenu.", ke: "Nooro che keitar..." } },
-    { reference: "1 Corinthians 13:13", versions: { en: "Faith, hope and love remain.", sw: "Imani, tumaini na upendo navyo vitadumu.", ke: "Nangusen, ret, na kim...", } },
-  ],
-};
-
-function getEasterDate(year: number): Date {
-  const a = year % 19;
-  const b = Math.floor(year / 100);
-  const c = year % 100;
-  const d = Math.floor(b / 4);
-  const e = b % 4;
-  const f = Math.floor((b + 8) / 25);
-  const g = Math.floor((b - f + 1) / 3);
-  const h = (19 * a + b - d - g + 15) % 30;
-  const i = Math.floor(c / 4);
-  const k = c % 4;
-  const l = (32 + 2 * e + 2 * i - h - k) % 7;
-  const m = Math.floor((a + 11 * h + 22 * l) / 451);
-  const month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
-  const day = ((h + l - 7 * m + 114) % 31) + 1;
-  return new Date(year, month, day);
-}
-
-function getFirstSundayOfAdvent(year: number): Date {
-  const christmas = new Date(year, 11, 25);
-  const day = christmas.getDay();
-  const diff = (day + 7 - 0) % 7;
-  const firstSunday = new Date(christmas);
-  firstSunday.setDate(christmas.getDate() - (22 + diff));
-  return firstSunday;
-}
-
-function getLiturgicalSeason(date: Date): keyof typeof CATHOLIC_LITURGICAL_READINGS {
-  const year = date.getFullYear();
-  const easter = getEasterDate(year);
-  const ashWednesday = new Date(easter);
-  ashWednesday.setDate(easter.getDate() - 46);
-  const pentecost = new Date(easter);
-  pentecost.setDate(easter.getDate() + 49);
-  const adventStart = getFirstSundayOfAdvent(year);
-
-  if (date >= adventStart && date < new Date(year, 11, 25)) return "advent";
-  if (date >= new Date(year, 11, 25) || date < new Date(year, 0, 6)) return "christmas";
-  if (date >= ashWednesday && date < easter) return "lent";
-  if (date >= easter && date <= pentecost) return "easter";
-  return "ordinary";
-}
-
-function getCatholicDailyReading(date: Date) {
-  const season = getLiturgicalSeason(date);
-  const readings = CATHOLIC_LITURGICAL_READINGS[season] || CATHOLIC_LITURGICAL_READINGS.ordinary;
-  const weekday = date.getDay(); // Sunday = 0
-  const index = (weekday + 6) % 7; // Monday=0, Sunday=6
-  return readings[index % readings.length];
-}
-
 const CrossSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="h-7 w-7"><path d="M12 2v20M2 12h20"/></svg>;
 const ChurchSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7"><path d="M4 22V10l8-6 8 6v12H4z"/><rect x="9" y="14" width="6" height="8"/></svg>;
 
 export function Home() {
   const [tickerIndex, setTickerIndex] = useState(0);
   const [showTicker, setShowTicker] = useState(true);
-  const [dailyReading, setDailyReading] = useState(() => getCatholicDailyReading(new Date()));
-  const [languageIndex, setLanguageIndex] = useState(0);
-  const [showReading, setShowReading] = useState(true);
+  const [dailyReading, setDailyReading] = useState<DailyReadingDisplay | null>(null);
+  const [readingLoading, setReadingLoading] = useState(true);
   useScrollReveal();
 
   useEffect(() => {
@@ -153,37 +48,35 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    let textTimer: ReturnType<typeof setTimeout>;
-    const interval = setInterval(() => {
-      setShowReading(false);
-      textTimer = setTimeout(() => {
-        setLanguageIndex(li => (li + 1) % LANGUAGES.length);
-        setShowReading(true);
-      }, 400);
-    }, 5400);
+    let cancelled = false;
+    let dayInterval: ReturnType<typeof setInterval> | undefined;
+
+    const load = async () => {
+      setReadingLoading(true);
+      const data = await fetchUsccbDailyReading();
+      if (!cancelled) {
+        setDailyReading(data);
+        setReadingLoading(false);
+      }
+    };
+    void load();
+
+    const now = new Date();
+    const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5);
+    const delay = Math.max(1_000, nextMidnight.getTime() - now.getTime());
+    const midnightTimer = setTimeout(() => {
+      void load();
+      dayInterval = setInterval(() => void load(), 24 * 60 * 60 * 1000);
+    }, delay);
 
     return () => {
-      clearInterval(interval);
-      clearTimeout(textTimer);
+      cancelled = true;
+      clearTimeout(midnightTimer);
+      if (dayInterval !== undefined) clearInterval(dayInterval);
     };
   }, []);
 
-  useEffect(() => {
-    const updateDailyReading = () => setDailyReading(getCatholicDailyReading(new Date()));
-    const now = new Date();
-    const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5);
-    const delay = nextMidnight.getTime() - now.getTime();
-
-    const midnightTimer = setTimeout(() => {
-      updateDailyReading();
-      setInterval(updateDailyReading, 24 * 60 * 60 * 1000);
-    }, delay);
-
-    return () => clearTimeout(midnightTimer);
-  }, []);
-
-  const currentLanguage = LANGUAGES[languageIndex];
-  const currentText = dailyReading.versions[currentLanguage.code];
+  const reading = dailyReading;
 
   return (
     <div>
@@ -207,20 +100,60 @@ export function Home() {
         style={{ backgroundImage: "url('/images/church.jpg')" }}>
         <div className="absolute inset-0 hero-overlay" />
         <div className="absolute inset-0 flex items-center justify-center opacity-8 pointer-events-none">
-          <img src="/images/logo_stamp.jpeg" alt="" className="w-96 h-96 object-contain mix-blend-overlay" style={{ opacity: 0.07 }} />
+          <img src="/images/church.jpg" alt="" className="w-96 h-96 object-contain mix-blend-overlay" style={{ opacity: 0.07 }} />
         </div>
-        <div className={`absolute left-8 top-20 z-20 max-w-sm text-left transition-all duration-700 ${showReading ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}>
-          <div className="rounded-3xl bg-emerald-950/90 p-6 shadow-[0_0_48px_rgba(141,86,58,0.45)] border border-emerald-200/15" style={{ backdropFilter: "blur(22px)" }}>
-            <p className="text-xs uppercase tracking-[0.35em] text-emerald-100 font-bold mb-3">Daily Reading · {currentLanguage.label}</p>
-            <p className="text-base md:text-lg text-emerald-50 font-semibold leading-relaxed">“{currentText}”</p>
-            <p className="text-[12px] uppercase tracking-[0.3em] text-emerald-200 font-semibold mt-3">{dailyReading.reference}</p>
+        <div
+          className={[
+            "absolute z-20 w-[min(100%-2rem,28rem)] transition-opacity duration-500",
+            /* Mobile: sit below hero copy, above scroll cue — does not cover the logo */
+            "max-md:left-1/2 max-md:-translate-x-1/2 max-md:top-auto max-md:bottom-28 max-md:text-center max-md:translate-y-0",
+            /* Desktop: left column, vertically centered */
+            "md:left-8 md:right-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0 md:max-w-sm md:w-auto md:text-left",
+            readingLoading ? "opacity-60" : "opacity-100",
+          ].join(" ")}
+        >
+          <div
+            className="rounded-3xl border border-white/25 bg-white/[0.06] p-5 md:p-6 shadow-[0_8px_40px_rgba(0,0,0,0.25)] backdrop-blur-md"
+          >
+            <p className="text-[10px] md:text-xs uppercase tracking-[0.28em] text-white/90 font-bold mb-2">
+              Daily reading · USCCB (NABRE)
+            </p>
+            {reading?.dayTitle ? (
+              <p className="text-sm md:text-base text-white font-bold mb-3 leading-snug">{reading.dayTitle}</p>
+            ) : null}
+            <p className="text-sm md:text-lg text-white font-semibold leading-relaxed">
+              {readingLoading && !reading ? (
+                <span className="text-white/70">Loading today&apos;s readings…</span>
+              ) : (
+                <>“{reading?.snippet ?? "—"}”</>
+              )}
+            </p>
+            {reading?.reference ? (
+              <p className="text-[11px] md:text-[12px] uppercase tracking-[0.2em] text-white/85 font-semibold mt-3">
+                Reading I · {reading.reference}
+              </p>
+            ) : null}
+            {reading?.gospelReference ? (
+              <p className="text-[11px] md:text-[12px] uppercase tracking-[0.2em] text-white/85 font-semibold mt-1.5">
+                Gospel · {reading.gospelReference}
+              </p>
+            ) : null}
+            {reading?.link ? (
+              <a
+                href={reading.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-block break-all text-left max-md:text-center text-[11px] md:text-xs font-semibold text-emerald-200/95 underline-offset-2 hover:text-white hover:underline"
+              >
+                {reading.link}
+              </a>
+            ) : null}
           </div>
         </div>
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
           <div className="mb-6 flex justify-center animate-float">
             <div className="h-36 w-36 md:h-44 md:w-44 rounded-full overflow-hidden border-4 shadow-2xl" style={{ borderColor: "#8d5439" }}>
-              <img src="/images/logo_color.jpeg" alt="St. Francis Cheptarit Parish Logo" className="h-full w-full object-cover"
-                onError={(e) => { (e.target as HTMLImageElement).src = "/images/logo.jpeg"; }} />
+              <img src="/images/church.jpg" alt="St. Francis Cheptarit Parish Logo" className="h-full w-full object-cover" />
             </div>
           </div>
           <div className="inline-block border text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-widest uppercase" style={{ background: "rgba(124,45,18,0.3)", borderColor: "rgba(180,83,9,0.6)", color: "#fed7aa" }}>
@@ -308,7 +241,7 @@ export function Home() {
                   <MapPin className="h-4 w-4" /> Cheptarit, Mosoriot
                 </div>
                 <div className="absolute -top-4 -right-4 h-16 w-16 rounded-full overflow-hidden border-3 shadow-xl" style={{ border: "3px solid #8d5439" }}>
-                  <img src="/images/logo_color.jpeg" alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/images/logo.jpeg"; }} />
+                  <img src="/images/church.jpg" alt="" className="h-full w-full object-cover" />
                 </div>
               </div>
             </ScrollReveal>
@@ -449,7 +382,7 @@ export function Home() {
         <div className="container mx-auto max-w-4xl text-center reveal">
           <div className="flex justify-center mb-4">
             <div className="h-20 w-20 rounded-full overflow-hidden border-4 shadow-xl" style={{ borderColor: "#8d5439" }}>
-              <img src="/images/logo_color.jpeg" alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/images/logo.jpeg"; }} />
+              <img src="/images/church.jpg" alt="" className="h-full w-full object-cover" />
             </div>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#6e3c28" }}>Join Our Parish Family</h2>

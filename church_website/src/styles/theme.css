@@ -565,7 +565,7 @@ a[href^="mailto:"] {
 .ministry-card:active { transform: scale(0.97); }
 
 .bg-logo-watermark {
-  background-image: url('/images/logo_stamp.jpeg');
+  background-image: url('/images/church.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 40%;

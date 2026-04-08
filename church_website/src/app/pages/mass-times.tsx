@@ -24,9 +24,7 @@ export function MassTimes() {
             </p>
           </div>
 
-          {/* Mass Schedule Cards */}
           <div className="space-y-6">
-            {/* Sunday */}
             <div className="rounded-2xl overflow-hidden shadow-md border border-green-100">
               <div className="p-5 text-white flex items-center gap-3" style={{ background: "linear-gradient(135deg, #7c4c2e, #ae7c5f)" }}>
                 <Sun className="h-10 w-10 text-green-200" />
@@ -49,7 +47,6 @@ export function MassTimes() {
               </div>
             </div>
 
-            {/* Weekday */}
             <div className="rounded-2xl overflow-hidden shadow-md border border-green-100">
               <div className="p-5 text-white flex items-center gap-3" style={{ background: "linear-gradient(135deg, #ae7c5f, #4caf50)" }}>
                 <Sun className="h-10 w-10 text-white" />
@@ -67,7 +64,6 @@ export function MassTimes() {
               </div>
             </div>
 
-            {/* Saturday */}
             <div className="rounded-2xl overflow-hidden shadow-md border border-green-100">
               <div className="p-5 text-white flex items-center gap-3" style={{ background: "linear-gradient(135deg, #8d5439, #e6c7ad)" }}>
                 <Sunrise className="h-10 w-10 text-yellow-200" />
@@ -90,7 +86,6 @@ export function MassTimes() {
               </div>
             </div>
 
-            {/* Special Occasions */}
             <div className="rounded-2xl overflow-hidden shadow-md border border-green-100">
               <div className="p-5 text-white flex items-center gap-3" style={{ background: "linear-gradient(135deg, #6a1b9a, #9c27b0)" }}>
                 <Sparkles className="h-10 w-10 text-purple-200" />
@@ -122,7 +117,6 @@ export function MassTimes() {
             </div>
           </div>
 
-          {/* Note */}
           <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
             <p className="text-yellow-800 font-semibold mb-2">📢 Important Notice</p>
             <p className="text-yellow-700 text-sm leading-relaxed">
@@ -134,7 +128,6 @@ export function MassTimes() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-16 px-4" style={{ background: "linear-gradient(135deg, #3a1f13, #7c4c2e)" }}>
         <div className="container mx-auto max-w-3xl text-center text-white">
           <h2 className="text-2xl font-bold mb-3">Questions About Mass Times?</h2>

@@ -28,7 +28,6 @@ export function Giving() {
         </div>
       </section>
 
-      {/* M-PESA Hero */}
       <section className="py-16 px-4" style={{ background: "linear-gradient(135deg, #f8efe2, #ecd5c5)" }}>
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-10">
@@ -38,7 +37,6 @@ export function Giving() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 items-start">
-            {/* Paybill Details */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-green-100" style={{ boxShadow: "0 0 40px rgba(141,86,58,0.14)" }}>
               <div className="p-5 text-white" style={{ background: "linear-gradient(135deg, #7c4c2e, #ae7c5f)", boxShadow: "0 0 32px rgba(140,90,61,0.22)" }}>
                 <div className="flex items-center gap-3 mb-1">
@@ -66,7 +64,6 @@ export function Giving() {
               </div>
             </div>
 
-            {/* Visual Summary */}
             <div className="space-y-4">
               <div className="rounded-2xl p-8 text-white text-center shadow-lg" style={{ background: "linear-gradient(135deg, #8d5439, #e6c7ad)", boxShadow: "0 0 40px rgba(141,86,58,0.2)" }}>
                 <p className="text-green-950 text-sm font-semibold mb-1">M-PESA PAYBILL NUMBER</p>
@@ -101,7 +98,6 @@ export function Giving() {
         </div>
       </section>
 
-      {/* Ways to Give */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-10">
@@ -125,7 +121,6 @@ export function Giving() {
         </div>
       </section>
 
-      {/* What Your Gift Supports */}
       <section className="py-16 px-4" style={{ background: "#f8efe2" }}>
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10">
@@ -145,7 +140,6 @@ export function Giving() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-16 px-4 text-white" style={{ background: "linear-gradient(135deg, #3a1f13, #7c4c2e)" }}>
         <div className="container mx-auto max-w-3xl text-center">
           <Heart className="h-12 w-12 mx-auto mb-4 text-red-400" />

@@ -1,23 +1,4 @@
-# Quick Start Guide - St. Francis Church Website
 
-## Getting Started
-
-Your church website is ready to use! Here's what you need to know:
-
-## What's Already Done ✅
-
-- ✅ 7 Complete pages (Home, About, Mass Times, Ministries, Events, Contact, Giving)
-- ✅ Responsive design (works on mobile, tablet, and desktop)
-- ✅ Green theme for the church
-- ✅ Navigation header with mobile menu
-- ✅ Footer with contact information
-- ✅ All UI components from Shadcn
-- ✅ React Router for page navigation
-
-## Immediate Customizations Needed
-
-### 1. Contact Information (PRIORITY)
-Replace placeholder contact details with real information:
 
 **Files to edit:**
 - `/src/app/components/footer.tsx` - Lines with phone, email, address

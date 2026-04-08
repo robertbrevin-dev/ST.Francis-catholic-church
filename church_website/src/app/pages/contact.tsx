@@ -45,7 +45,6 @@ export function Contact() {
       <section className="py-16 px-4 bg-white page-background-section">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Info */}
             <div>
               <h2 className="text-2xl font-bold text-green-900 mb-6">Get In Touch</h2>
               <div className="space-y-4 mb-8">
@@ -111,7 +110,6 @@ export function Contact() {
                 })}
               </div>
 
-              {/* WhatsApp Quick Contact */}
               <div className="bg-green-600 rounded-2xl p-6 text-white">
                 <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
                   <MessageCircle className="h-5 w-5" /> WhatsApp — Quick Contact
@@ -130,7 +128,6 @@ export function Contact() {
               </div>
             </div>
 
-            {/* Contact Form */}
             <div>
               <h2 className="text-2xl font-bold text-green-900 mb-6">Send a Message</h2>
               {sent && (
@@ -172,7 +169,6 @@ export function Contact() {
         </div>
       </section>
 
-      {/* Emergency Pastoral Care */}
       <section className="py-10 px-4" style={{ background: "#ecd5c5" }}>
         <div className="container mx-auto max-w-4xl">
           <div className="bg-white rounded-2xl p-6 border border-red-100 shadow-sm">

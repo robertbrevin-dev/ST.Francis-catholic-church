@@ -254,7 +254,6 @@ export function Services() {
 
   return (
     <div>
-      {/* Header */}
       <section
         className="py-20 px-4 text-white relative overflow-hidden"
         style={{ background: "linear-gradient(135deg, #3a1f13 0%, #7c4c2e 100%)" }}
@@ -269,7 +268,6 @@ export function Services() {
         </div>
       </section>
 
-      {/* Intro */}
       <section className="py-10 px-4 bg-white">
         <div className="container mx-auto max-w-4xl text-center">
           <p className="text-gray-600 leading-relaxed text-lg">
@@ -280,14 +278,12 @@ export function Services() {
         </div>
       </section>
 
-      {/* Services */}
       <section className="py-10 px-4" style={{ background: "#f8efe2" }}>
         <div className="container mx-auto max-w-6xl">
           <div className="space-y-6">
             {displayList.map((s) => (
               <div key={s.key} className="bg-white rounded-2xl shadow-md overflow-hidden border border-green-100 hover:shadow-lg transition-all">
                 <div className="grid md:grid-cols-3">
-                  {/* Left: Icon + Title */}
                   <div
                     className="p-8 flex flex-col justify-center text-white"
                     style={{ background: `linear-gradient(135deg, ${s.color}, ${s.color}bb)` }}
@@ -297,7 +293,6 @@ export function Services() {
                     <p className="text-white/75 text-sm">{s.subtitle}</p>
                   </div>
 
-                  {/* Middle: Description */}
                   <div className="p-6">
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">{s.description}</p>
                     {s.note && (
@@ -307,7 +302,6 @@ export function Services() {
                     )}
                   </div>
 
-                  {/* Right: Schedule */}
                   <div className="p-6" style={{ background: s.bg }}>
                     <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: s.color }}>Schedule</p>
                     <div className="space-y-3">
@@ -332,7 +326,6 @@ export function Services() {
         </div>
       </section>
 
-      {/* CTA */}
       <section
         className="py-16 px-4 text-white"
         style={{ background: "linear-gradient(135deg, #3a1f13, #7c4c2e)" }}
