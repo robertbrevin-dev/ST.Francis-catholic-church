@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 
-const envUrl = ((import.meta.env.VITE_SUPABASE_URL as string) || "").trim()
-const envKey = ((import.meta.env.VITE_SUPABASE_ANON_KEY as string) || "").trim()
+const envUrl = (import.meta.env.VITE_SUPABASE_URL as string) || ""
+const envKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || ""
 
 const supabaseUrl = envUrl.startsWith("http") ? envUrl : "http://127.0.0.1:59999"
 const supabaseAnonKey = envKey.length > 20 ? envKey : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid"
@@ -9,7 +9,6 @@ const supabaseAnonKey = envKey.length > 20 ? envKey : "eyJhbGciOiJIUzI1NiIsInR5c
 export const SUPABASE_AUTH_STORAGE_KEY = "stfrancis-admin-auth"
 
 const SUPABASE_FETCH_TIMEOUT_MS = 120_000
-const SUPABASE_REST_TIMEOUT_MS = 60_000
 const SUPABASE_STORAGE_TIMEOUT_MS = 90_000
 const SUPABASE_AUTH_TIMEOUT_MS = 45_000
 
@@ -40,7 +39,7 @@ export const isSupabaseConfigured = Boolean(envUrl.startsWith("http") && envKey.
 
 if (import.meta.env.DEV && !isSupabaseConfigured) {
   console.warn(
-    "[Supabase] Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in church_website/.env then restart `vite`.",
+    "[Supabase] Set VITE_SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and VITE_SUPABASE_ANON_KEY (or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY) in church_website/.env then restart `vite`.",
   )
 }
 

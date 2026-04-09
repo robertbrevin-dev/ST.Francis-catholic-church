@@ -1,16 +1,25 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { useScrollReveal } from "../components/scroll-reveal"
 import { ParishPageHero } from "../components/parish-page-hero"
-import { ExternalLink, Wifi } from "lucide-react"
+import { ExternalLink, Wifi, Play } from "lucide-react"
 import { supabase } from "../../lib/supabase"
-import { getFacebookEmbedSrc, getYouTubeEmbedSrc, isConfiguredStreamUrl } from "../../lib/livestreamEmbed"
+import { getFacebookEmbedSrc, getYouTubeEmbedSrc, isConfiguredStreamUrl, normalizeExternalUrl } from "../../lib/livestreamEmbed"
 
 type StreamConfig = {
   youtube_url: string
+  youtube_title?: string
+  youtube_description?: string
+  youtube_poster_url?: string
   facebook_url: string
+  facebook_title?: string
+  facebook_description?: string
+  facebook_poster_url?: string
   zoom_meeting_url: string
   zoom_meeting_id: string
   zoom_passcode: string
+  zoom_title?: string
+  zoom_description?: string
+  zoom_poster_url?: string
 }
 
 const YoutubeIcon = () => (
@@ -34,13 +43,17 @@ function ClickableStreamPreview({
   embedSrc,
   openLabel,
   fallback,
+  posterUrl,
 }: {
   href: string
   embedSrc: string | null
   openLabel: string
   fallback: ReactNode
+  posterUrl?: string
 }) {
+  const [showPlayer, setShowPlayer] = useState(false)
   const ok = isConfiguredStreamUrl(href)
+
   if (!ok) {
     return (
       <div className="parish-glass-card aspect-video flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#c9a88a]/50 px-4 text-center text-sm text-gray-600">
@@ -52,31 +65,79 @@ function ClickableStreamPreview({
 
   return (
     <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-zinc-900 shadow-inner ring-1 ring-black/10">
-      {embedSrc ? (
+      {showPlayer && embedSrc ? (
         <iframe
-          src={embedSrc}
+          src={`${embedSrc}?autoplay=1`}
           title="Stream preview"
-          className="absolute inset-0 h-full w-full border-0 pointer-events-none"
+          className="absolute inset-0 h-full w-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           loading="lazy"
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center p-6 text-white">{fallback}</div>
+        <>
+          {posterUrl ? (
+            <img 
+              src={posterUrl} 
+              alt="Stream poster" 
+              className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity hover:opacity-80" 
+              loading="lazy"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center p-6 text-white opacity-40">
+              {fallback}
+            </div>
+          )}
+          
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            {embedSrc ? (
+              <button
+                onClick={() => setShowPlayer(true)}
+                className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 active:scale-95"
+                aria-label="Load preview"
+              >
+                <div className="bg-white/20 backdrop-blur-md rounded-full p-4 border border-white/30 shadow-xl group-hover:bg-white/30 transition-colors">
+                  <div className="bg-white text-black rounded-full p-3 shadow-inner">
+                    <Play className="h-6 w-6 fill-current ml-1" />
+                  </div>
+                </div>
+                <span className="text-white text-xs font-bold uppercase tracking-widest drop-shadow-md">
+                  Click to Preview
+                </span>
+              </button>
+            ) : (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-3 transition-transform hover:scale-105"
+              >
+                <div className="bg-white/20 backdrop-blur-md rounded-full p-4 border border-white/30 shadow-xl">
+                  <ExternalLink className="h-8 w-8 text-white" />
+                </div>
+                <span className="text-white text-xs font-bold uppercase tracking-widest drop-shadow-md">
+                  Visit External Site
+                </span>
+              </a>
+            )}
+          </div>
+        </>
       )}
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute inset-0 z-10 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/25 to-transparent pb-3 pt-12 px-3 text-center outline-none focus-visible:ring-2 focus-visible:ring-white/80 rounded-xl"
-        aria-label={openLabel}
-      >
-        <span className="text-white text-sm font-bold drop-shadow-md flex items-center justify-center gap-2">
-          {openLabel}
-          <ExternalLink className="h-4 w-4 opacity-90" />
-        </span>
-        <span className="text-white/85 text-[11px] mt-1">Opens in a new tab for full playback</span>
-      </a>
+
+      {!showPlayer && (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute bottom-0 left-0 right-0 z-30 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent pb-3 pt-12 px-3 text-center"
+          aria-label={openLabel}
+        >
+          <span className="text-white text-[10px] font-bold drop-shadow-md flex items-center justify-center gap-1 opacity-70">
+            {openLabel}
+            <ExternalLink className="h-3 w-3" />
+          </span>
+        </a>
+      )}
     </div>
   )
 }
@@ -107,20 +168,30 @@ export function Livestream() {
     try {
       const { data, error } = await supabase
         .from("livestream_config")
-        .select("youtube_url, facebook_url, zoom_meeting_url, zoom_meeting_id, zoom_passcode")
+        .select("*")
+        .eq("id", "main")
         .maybeSingle()
 
       if (error) {
-        console.error("Error loading stream config:", error)
+        console.error("Error loading stream config:", error.message || error)
       }
 
       if (data) {
         setStreamConfig({
-          youtube_url: (data.youtube_url ?? "").trim(),
-          facebook_url: (data.facebook_url ?? "").trim(),
-          zoom_meeting_url: (data.zoom_meeting_url ?? "").trim(),
+          youtube_url: normalizeExternalUrl((data.youtube_url ?? "").trim()),
+          youtube_title: (data.youtube_title ?? "").trim(),
+          youtube_description: (data.youtube_description ?? "").trim(),
+          youtube_poster_url: normalizeExternalUrl((data.youtube_poster_url ?? "").trim()),
+          facebook_url: normalizeExternalUrl((data.facebook_url ?? "").trim()),
+          facebook_title: (data.facebook_title ?? "").trim(),
+          facebook_description: (data.facebook_description ?? "").trim(),
+          facebook_poster_url: normalizeExternalUrl((data.facebook_poster_url ?? "").trim()),
+          zoom_meeting_url: normalizeExternalUrl((data.zoom_meeting_url ?? "").trim()),
           zoom_meeting_id: (data.zoom_meeting_id ?? "").trim(),
           zoom_passcode: (data.zoom_passcode ?? "").trim(),
+          zoom_title: (data.zoom_title ?? "").trim(),
+          zoom_description: (data.zoom_description ?? "").trim(),
+          zoom_poster_url: normalizeExternalUrl((data.zoom_poster_url ?? "").trim()),
         })
       }
     } catch (error) {
@@ -191,13 +262,14 @@ export function Livestream() {
                 <div className="flex justify-center mb-3">
                   <YoutubeIcon />
                 </div>
-                <h3 className="font-bold text-xl">YouTube</h3>
+                <h3 className="font-bold text-xl">{streamConfig.youtube_title || "YouTube"}</h3>
                 <p className="text-emerald-100 text-sm mt-1">Live & Recorded</p>
               </div>
               <div className="space-y-4 p-5 parish-glass-card">
                 <ClickableStreamPreview
                   href={streamConfig.youtube_url}
                   embedSrc={ytEmbed}
+                  posterUrl={streamConfig.youtube_poster_url}
                   openLabel="Open on YouTube"
                   fallback={
                     <div
@@ -209,9 +281,21 @@ export function Livestream() {
                     </div>
                   }
                 />
-                <p className="text-gray-600 text-sm text-center">
-                  Watch our live Masses and recorded services on YouTube.
-                </p>
+                <div className="space-y-3">
+                  <p className="text-gray-600 text-sm text-center leading-relaxed">
+                    {streamConfig.youtube_description || "Watch our live Masses and recorded services on YouTube."}
+                  </p>
+                  
+                  {isConfiguredStreamUrl(streamConfig.youtube_url) && (
+                    <div className="bg-orange-50/50 rounded-lg p-2 border border-orange-100/50">
+                      <p className="text-[10px] text-orange-800/70 font-medium uppercase tracking-wider mb-1 text-center">Stream URL</p>
+                      <p className="text-[11px] text-orange-900/80 font-mono break-all text-center px-2">
+                        {streamConfig.youtube_url}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
                 {isConfiguredStreamUrl(streamConfig.youtube_url) && (
                   <a
                     href={streamConfig.youtube_url}
@@ -233,13 +317,14 @@ export function Livestream() {
                 <div className="flex justify-center mb-3">
                   <FacebookIcon />
                 </div>
-                <h3 className="font-bold text-xl">Facebook</h3>
+                <h3 className="font-bold text-xl">{streamConfig.facebook_title || "Facebook"}</h3>
                 <p className="text-blue-100 text-sm mt-1">Facebook Live</p>
               </div>
               <div className="space-y-4 p-5 parish-glass-card">
                 <ClickableStreamPreview
                   href={streamConfig.facebook_url}
                   embedSrc={fbEmbed}
+                  posterUrl={streamConfig.facebook_poster_url}
                   openLabel="Open on Facebook"
                   fallback={
                     <div className="text-center space-y-2 flex flex-col items-center justify-center h-full" style={{ background: "linear-gradient(135deg, #0d5ec4, #1877f2)" }}>
@@ -248,9 +333,21 @@ export function Livestream() {
                     </div>
                   }
                 />
-                <p className="text-gray-600 text-sm text-center">
-                  Join us on Facebook Live for Sunday Masses and parish celebrations.
-                </p>
+                <div className="space-y-3">
+                  <p className="text-gray-600 text-sm text-center leading-relaxed">
+                    {streamConfig.facebook_description || "Join us on Facebook Live for Sunday Masses and parish celebrations."}
+                  </p>
+                  
+                  {isConfiguredStreamUrl(streamConfig.facebook_url) && (
+                    <div className="bg-blue-50/50 rounded-lg p-2 border border-blue-100/50">
+                      <p className="text-[10px] text-blue-800/70 font-medium uppercase tracking-wider mb-1 text-center">Stream URL</p>
+                      <p className="text-[11px] text-blue-900/80 font-mono break-all text-center px-2">
+                        {streamConfig.facebook_url}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
                 {isConfiguredStreamUrl(streamConfig.facebook_url) && (
                   <a
                     href={streamConfig.facebook_url}
@@ -272,13 +369,14 @@ export function Livestream() {
                 <div className="flex justify-center mb-3">
                   <ZoomIcon />
                 </div>
-                <h3 className="font-bold text-xl">Zoom</h3>
+                <h3 className="font-bold text-xl">{streamConfig.zoom_title || "Zoom"}</h3>
                 <p className="text-blue-100 text-sm mt-1">Interactive Sessions</p>
               </div>
               <div className="space-y-4 p-5 parish-glass-card">
                 <ClickableStreamPreview
                   href={streamConfig.zoom_meeting_url}
                   embedSrc={null}
+                  posterUrl={streamConfig.zoom_poster_url}
                   openLabel="Join Zoom meeting"
                   fallback={
                     <div className="flex flex-col items-center justify-center gap-2 text-center h-full w-full" style={{ background: "linear-gradient(135deg, #0e72eb, #2d8cff)" }}>
@@ -287,9 +385,21 @@ export function Livestream() {
                     </div>
                   }
                 />
-                <p className="text-gray-600 text-sm text-center">
-                  Join meetings, catechism, and prayer gatherings on Zoom.
-                </p>
+                <div className="space-y-3">
+                  <p className="text-gray-600 text-sm text-center leading-relaxed">
+                    {streamConfig.zoom_description || "Join meetings, catechism, and prayer gatherings on Zoom."}
+                  </p>
+                  
+                  {isConfiguredStreamUrl(streamConfig.zoom_meeting_url) && (
+                    <div className="bg-blue-50/50 rounded-lg p-2 border border-blue-100/50">
+                      <p className="text-[10px] text-blue-800/70 font-medium uppercase tracking-wider mb-1 text-center">Meeting URL</p>
+                      <p className="text-[11px] text-blue-900/80 font-mono break-all text-center px-2">
+                        {streamConfig.zoom_meeting_url}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
                 <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
                   <p className="text-xs text-blue-700 font-semibold">
                     Meeting ID: <span className="font-bold">{displayOrDash(streamConfig.zoom_meeting_id)}</span>

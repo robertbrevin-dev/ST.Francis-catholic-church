@@ -1,5 +1,5 @@
 export function isConfiguredStreamUrl(url: string | null | undefined): boolean {
-  const u = (url ?? "").trim()
+  const u = (url ?? "").trim().replace(/^`|`$/g, "").trim()
   if (!u || u === "#") return false
   try {
     const parsed = new URL(u.startsWith("http://") || u.startsWith("https://") ? u : `https://${u}`)
@@ -9,8 +9,15 @@ export function isConfiguredStreamUrl(url: string | null | undefined): boolean {
   }
 }
 
+export function normalizeExternalUrl(url: string | null | undefined): string {
+  const u = (url ?? "").trim().replace(/^`|`$/g, "").trim()
+  if (!u || u === "#") return ""
+  if (u.startsWith("http://") || u.startsWith("https://")) return u
+  return `https://${u}`
+}
+
 export function getYouTubeVideoId(url: string): string | null {
-  const raw = url.trim()
+  const raw = url.trim().replace(/^`|`$/g, "").trim()
   if (!raw) return null
   try {
     const u = new URL(raw.startsWith("http://") || raw.startsWith("https://") ? raw : `https://${raw}`)
@@ -48,6 +55,7 @@ export function getYouTubeEmbedSrc(url: string): string | null {
 
 export function getFacebookEmbedSrc(url: string): string | null {
   if (!isConfiguredStreamUrl(url)) return null
-  if (!url.includes("facebook.com") && !url.includes("fb.watch")) return null
-  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url.trim())}&show_text=false&width=560`
+  const normalized = normalizeExternalUrl(url)
+  if (!normalized.includes("facebook.com") && !normalized.includes("fb.watch")) return null
+  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(normalized)}&show_text=false&width=560`
 }
