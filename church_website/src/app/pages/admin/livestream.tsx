@@ -6,6 +6,8 @@ import { normalizeExternalUrl } from "../../../lib/livestreamEmbed"
 import { Save, ExternalLink, Youtube, Facebook, Video, X } from "lucide-react"
 import { toast } from "sonner"
 
+const SAVE_REQUEST_TIMEOUT_MS = 10_000
+
 export function AdminLivestream() {
   const navigate = useNavigate()
   const [saving, setSaving] = useState(false)
@@ -116,6 +118,10 @@ export function AdminLivestream() {
       notify("Supabase is not configured. Add VITE_SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and VITE_SUPABASE_ANON_KEY (or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY) to .env and restart the dev server.", false)
       return
     }
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      notify("You appear to be offline. Reconnect to the internet and try saving again.", false)
+      return
+    }
 
     setSaving(true)
     try {
@@ -143,11 +149,19 @@ export function AdminLivestream() {
         updated_at: new Date().toISOString(),
       }
 
-      const { data, error } = await supabase
+      const saveRequest = supabase
         .from("livestream_config")
         .upsert(row, { onConflict: "id" })
         .select("*")
         .maybeSingle()
+
+      const timeoutError = new Promise<never>((_, reject) => {
+        globalThis.setTimeout(() => {
+          reject(new Error("Save request timed out after 10 seconds. Check network and Supabase status, then try again."))
+        }, SAVE_REQUEST_TIMEOUT_MS)
+      })
+
+      const { data, error } = await Promise.race([saveRequest, timeoutError])
 
       if (error) {
         console.error("Supabase upsert error:", error)
@@ -183,9 +197,14 @@ export function AdminLivestream() {
         })
       }
     } catch (error) {
+      const text = error instanceof Error ? error.message.toLowerCase() : ""
       const msg =
         error instanceof DOMException && error.name === "AbortError"
           ? "Save timed out. Check your network, VPN, or Supabase project status, then try again."
+          : text.includes("failed to fetch") || text.includes("networkerror")
+            ? "Could not reach Supabase (network error). Check your internet/VPN/firewall and confirm VITE_SUPABASE_URL is correct."
+            : text.includes("timed out")
+              ? "Save timed out. Supabase is taking too long to respond. Please try again in a few seconds."
           : error instanceof Error
             ? error.message
             : "An error occurred while saving."

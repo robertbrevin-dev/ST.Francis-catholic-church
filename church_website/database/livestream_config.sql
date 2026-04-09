@@ -30,11 +30,13 @@ ALTER TABLE livestream_config ADD COLUMN IF NOT EXISTS zoom_poster_url TEXT;
 ALTER TABLE livestream_config ENABLE ROW LEVEL SECURITY;
 
 -- Create policy to allow authenticated users to read the config
+DROP POLICY IF EXISTS "Anyone can view livestream config" ON livestream_config;
 CREATE POLICY "Anyone can view livestream config" ON livestream_config
   FOR SELECT USING (true);
 
 -- Create policy to allow admin users to update the config
 DROP POLICY IF EXISTS "Admins can update livestream config" ON livestream_config;
+DROP POLICY IF EXISTS "livestream_admin_write" ON livestream_config;
 
 CREATE POLICY "livestream_admin_write" ON livestream_config
   FOR ALL
