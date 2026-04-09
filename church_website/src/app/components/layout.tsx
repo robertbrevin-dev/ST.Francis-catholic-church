@@ -1,14 +1,15 @@
 import { useEffect } from "react";
-import { Outlet, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { AnimatedBg } from "./scroll-reveal";
+import { AnimatedOutlet } from "./animated-outlet";
 
 export function Layout() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [location.pathname]);
 
   useEffect(() => {
@@ -34,8 +35,8 @@ export function Layout() {
     <div className="min-h-screen flex flex-col">
       <AnimatedBg />
       <Header />
-      <main className="flex-1">
-        <Outlet />
+      <main className="flex min-h-0 flex-1 flex-col parish-main-bg">
+        <AnimatedOutlet />
       </main>
       <Footer />
     </div>

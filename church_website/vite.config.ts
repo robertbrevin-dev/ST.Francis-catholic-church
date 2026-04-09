@@ -4,11 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  css: {
+    devSourcemap: false,
+  },
   server: {
     port: 5175,
     strictPort: false,
     proxy: {
-      // Same path as production Vercel function — avoids browser CORS to USCCB in dev
       "/api/usccb-rss": {
         target: "https://www.usccb.org",
         changeOrigin: true,

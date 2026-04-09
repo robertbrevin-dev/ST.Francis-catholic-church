@@ -1,7 +1,3 @@
-/**
- * Proxies USCCB daily readings RSS so the SPA can fetch same-origin (CORS-safe).
- * Deploy: Vercel serves /api/usccb-rss from this file automatically.
- */
 export default async function handler(req, res) {
   if (req.method && req.method !== "GET" && req.method !== "HEAD") {
     res.status(405).setHeader("Allow", "GET, HEAD").send("Method Not Allowed");

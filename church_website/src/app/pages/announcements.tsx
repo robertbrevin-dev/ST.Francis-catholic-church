@@ -1,21 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Bell, Send, Calendar, Pin, MessageSquare, ThumbsUp, Share2 } from 'lucide-react'
+import { ParishPageHero } from '../components/parish-page-hero'
 import { supabase } from '../../lib/supabase'
+import { fetchPublishedAnnouncements, type AnnouncementRow } from '../../lib/announcements'
 
 const CATEGORIES = ['All', 'General', 'Mass', 'Sacraments', 'Finance', 'Community', 'Events']
 
-type Announcement = {
-  id: string
-  title: string
-  content: string
-  display_date: string
-  category: string
-  color: string
-  pinned: boolean
-  author_id: string
-  created_at: string
-  expires_at: string
-}
+type Announcement = AnnouncementRow & { author_id?: string }
 
 type Message = {
   id: string
@@ -39,28 +30,19 @@ export function Announcements() {
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [lightbox, setLightbox] = useState<string|null>(null)
 
   useEffect(() => {
     fetchAnnouncements()
     fetchMessages()
     fetchLikes()
 
-    const channel = supabase
-      .channel('announcements')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, fetchAnnouncements)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'parish_messages' }, fetchMessages)
-      .subscribe()
-
-    return () => { supabase.removeChannel(channel) }
+    const interval = setInterval(() => { fetchAnnouncements(); fetchMessages(); fetchLikes() }, 30000)
+    return () => clearInterval(interval)
   }, [])
 
   async function fetchAnnouncements() {
-    const { data } = await supabase
-      .from('announcements')
-      .select('*')
-      .eq('is_active', true)
-      .gt('expires_at', new Date().toISOString())
-      .order('created_at', { ascending: false })
+    const { data } = await fetchPublishedAnnouncements()
     if (data) {
       setPinned(data.filter(a => a.pinned))
       setAnnouncements(data.filter(a => !a.pinned))
@@ -112,22 +94,19 @@ export function Announcements() {
 
   return (
     <div>
-      <section className="py-20 px-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #3a1f13 0%, #7c4c2e 100%)' }}>
-        <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <div className="flex justify-center mb-4">
-            <div className="live-badge text-base px-5 py-2 flex items-center gap-2">
-              <Bell className="h-4 w-4" />
-              <span className="live-dot w-2 h-2 rounded-full bg-white inline-block"></span>
-              ANNOUNCEMENTS
-            </div>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Parish Announcements</h1>
-          <div className="w-20 h-1 bg-yellow-400 mx-auto mb-4 rounded"></div>
-          <p className="text-green-200 text-lg max-w-xl mx-auto">Stay up to date with everything happening at St. Francis Cheptarit Catholic Parish</p>
-        </div>
-      </section>
+      <ParishPageHero
+        imageUrl="/images/announcements-hero-background.png"
+        eyebrow="Stay informed"
+        title="Parish Announcements"
+        icon={<Bell className="text-white drop-shadow-sm" aria-hidden />}
+        tagline="Stay up to date with everything happening at St. Francis Cheptarit Catholic Parish"
+      >
+        <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
+          Read pinned notices, latest parish news, and updates from the pulpit and parish office ï¿½ all in one place.
+        </p>
+      </ParishPageHero>
 
-      <section className="py-10 px-4 bg-white">
+      <section className="parish-page-content-bg page-background-section py-10 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="flex items-center gap-2 mb-6">
             <Pin className="h-5 w-5 text-red-500" />
@@ -143,9 +122,14 @@ export function Announcements() {
                 <div key={a.id} className="rounded-2xl p-6 text-white shadow-lg relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${a.color}, ${a.color}cc)` }}>
                   <div className="absolute top-3 right-3"><Pin className="h-4 w-4 text-white/70" /></div>
                   <div className="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">{a.category}</div>
+                  {a.poster_url ? (
+                    <div className="mb-4 overflow-hidden rounded-xl border border-white/10 bg-black/10">
+                      <img src={a.poster_url} alt="" className="w-full max-h-56 object-contain object-top bg-black/20" loading="lazy" />
+                    </div>
+                  ) : null}
                   <h3 className="font-bold text-lg mb-3">{a.title}</h3>
                   <p className="text-white/85 text-sm leading-relaxed whitespace-pre-line">{a.content}</p>
-                  <p className="text-white/60 text-xs mt-4">— {a.display_date}</p>
+                  <p className="text-white/60 text-xs mt-4">{a.display_date ? `ï¿½ ${a.display_date}` : ""}</p>
                 </div>
               ))}
             </div>
@@ -153,7 +137,7 @@ export function Announcements() {
         </div>
       </section>
 
-      <section className="py-10 px-4" style={{ background: '#f8efe2' }}>
+      <section className="parish-page-content-bg page-background-section py-10 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="flex items-center gap-2 mb-6">
             <Bell className="h-5 w-5 text-green-600" />
@@ -172,23 +156,30 @@ export function Announcements() {
             {filtered.length === 0 ? (
               <p className="text-gray-400 text-sm">No announcements in this category.</p>
             ) : filtered.map(a => (
-              <div key={a.id} className="bg-white rounded-2xl shadow-sm p-6 border border-green-100 hover:shadow-md transition-all">
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full text-white" style={{ background: a.color }}>{a.category}</span>
-                  <div className="flex items-center gap-2 text-xs text-gray-400"><Calendar className="h-3.5 w-3.5" />{a.display_date}</div>
-                </div>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-bold text-green-900 text-lg">{a.title}</h3>
-                  <span className="text-xs text-orange-600">Expires in {daysUntilExpire(a.expires_at)} days</span>
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{a.content}</p>
-                <div className="flex items-center gap-4 mt-4 pt-3 border-t border-gray-100">
-                  <button onClick={() => handleLike(a.id)} className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-green-600 transition-colors">
-                    <ThumbsUp className="h-4 w-4" /><span>Amen {(likes[a.id] || 0) > 0 ? `(${likes[a.id]})` : ''}</span>
-                  </button>
-                  <button onClick={() => navigator.share?.({ title: a.title, text: a.content })} className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-green-600 transition-colors">
-                    <Share2 className="h-4 w-4" />Share
-                  </button>
+              <div key={a.id} className="bg-white rounded-2xl shadow-sm border hover:shadow-lg transition-all overflow-hidden" style={{borderColor:'rgba(124,45,18,0.12)'}}>
+                <div className="flex flex-col sm:flex-row">
+                  <div className="flex-1 p-5">
+                    <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+                      <span className="text-xs font-semibold px-3 py-1 rounded-full text-white" style={{background:a.color}}>{a.category}</span>
+                      <div className="flex items-center gap-2 text-xs text-gray-400"><Calendar className="h-3 w-3"/>{a.display_date}</div>
+                    </div>
+                    <h3 className="font-bold text-lg mb-2" style={{color:'#3a1f13'}}>{a.title}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line mb-3">{a.content}</p>
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t" style={{borderColor:'rgba(124,45,18,0.1)'}}>
+                      <button onClick={()=>handleLike(a.id)} className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-orange-600 transition-colors">
+                        <ThumbsUp className="h-4 w-4"/><span>Amen{(likes[a.id]||0)>0?` (${likes[a.id]})`:''}</span>
+                      </button>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-orange-500">Expires in {daysUntilExpire(a.expires_at)}d</span>
+                        <button onClick={()=>navigator.share?.({title:a.title,text:a.content})} className="flex items-center gap-1 text-xs text-gray-400 hover:text-orange-600 transition-colors"><Share2 className="h-3.5 w-3.5"/>Share</button>
+                      </div>
+                    </div>
+                  </div>
+                  {a.poster_url ? (
+                    <div className="sm:w-44 sm:flex-shrink-0 cursor-pointer" onClick={()=>setLightbox(a.poster_url)}>
+                      <img src={a.poster_url} alt={a.title} className="w-full h-48 sm:h-full object-cover sm:rounded-r-2xl" loading="lazy" style={{minHeight:'160px'}}/>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ))}
@@ -196,7 +187,7 @@ export function Announcements() {
         </div>
       </section>
 
-      <section className="py-12 px-4 bg-white">
+      <section className="parish-page-content-bg page-background-section py-12 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="flex items-center gap-2 mb-2">
             <MessageSquare className="h-5 w-5 text-green-600" />
@@ -238,6 +229,12 @@ export function Announcements() {
           </div>
         </div>
       </section>
+      {lightbox && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.92)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:'16px'}} onClick={()=>setLightbox(null)}>
+          <img src={lightbox} alt="Poster" style={{maxWidth:'100%',maxHeight:'92vh',borderRadius:'12px',boxShadow:'0 8px 40px rgba(0,0,0,0.6)'}}/>
+          <button style={{position:'absolute',top:'16px',right:'20px',color:'white',fontSize:'28px',background:'none',border:'none',cursor:'pointer',lineHeight:1}} onClick={()=>setLightbox(null)}>&times;</button>
+        </div>
+      )}
     </div>
   )
 }

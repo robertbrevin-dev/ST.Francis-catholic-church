@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import { Calendar, Clock, MapPin, BookOpen, Users, Music, GraduationCap, Star, Heart, Bell, ChevronRight } from "lucide-react";
+import { ParishPageHero } from "../components/parish-page-hero";
 
 const CrossIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="h-5 w-5"><path d="M12 2v20M2 12h20"/></svg>;
 const ChurchIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M4 22V10l8-6 8 6v12H4z"/><rect x="9" y="14" width="6" height="8"/></svg>;
@@ -25,25 +27,27 @@ export function Events() {
   const filtered = active === "All" ? EVENTS : EVENTS.filter(e => e.category === active);
   return (
     <div>
-      <section className="py-20 px-4 text-white" style={{ background:"linear-gradient(135deg, #3a1f13 0%, #7c4c2e 100%)" }}>
-        <div className="container mx-auto max-w-4xl text-center">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-yellow-400/20 border-2 border-yellow-400 flex items-center justify-center">
-              <Calendar className="h-8 w-8 text-yellow-300" />
-            </div>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Parish Events &amp; Calendar</h1>
-          <div className="w-20 h-1 bg-yellow-400 mx-auto mb-4 rounded"></div>
-          <p className="text-green-200 text-lg">Stay connected with everything happening at St. Francis Cheptarit</p>
-        </div>
-      </section>
-      <section className="py-12 px-4 bg-white">
+      <ParishPageHero
+        imageUrl="/images/events-hero-background.png"
+        eyebrow="Parish calendar"
+        title="Parish Events & Calendar"
+        icon={<Calendar className="text-white drop-shadow-sm" aria-hidden />}
+        tagline="Stay connected with everything happening at St. Francis Cheptarit"
+      >
+        <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
+          Regular events and activities at our parish. Check{" "}
+          <Link to="/announcements" className="font-bold text-green-800 underline underline-offset-2 hover:text-green-700">
+            Announcements
+          </Link>{" "}
+          for special events and seasonal celebrations.
+        </p>
+      </ParishPageHero>
+      <section className="parish-page-content-bg page-background-section py-12 px-4">
         <div className="container mx-auto max-w-6xl">
-          <p className="text-center text-gray-600 mb-8 text-lg">Regular events and activities at our parish. Check <a href="/announcements" className="text-green-600 underline font-medium">Announcements</a> for special events.</p>
           <div className="flex flex-wrap gap-2 mb-8 justify-center">
             {CATEGORIES.map(cat => (
               <button key={cat} onClick={() => setActive(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${active===cat?"text-white shadow-md":"bg-gray-100 text-gray-600 hover:bg-green-50"}`}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${active===cat?"text-white shadow-md":"parish-glass-card text-gray-700 hover:border-green-300/40"}`}
                 style={active===cat?{background:"#7c4c2e"}:{}}>
                 {cat}
               </button>
@@ -53,7 +57,7 @@ export function Events() {
             {filtered.map(event => {
               const { Icon } = event;
               return (
-                <div key={event.id} className="ministry-card bg-white rounded-2xl shadow-md overflow-hidden border border-green-100">
+                <div key={event.id} className="ministry-card parish-glass-card rounded-2xl shadow-md overflow-hidden border border-green-100/80">
                   <div className="p-4 text-white flex items-center gap-3" style={{ background:`linear-gradient(135deg, ${event.color}, ${event.color}cc)` }}>
                     <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0"><Icon /></div>
                     <div>
@@ -73,9 +77,9 @@ export function Events() {
           <div className="mt-10 bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
             <p className="text-green-800 font-semibold mb-2 flex items-center justify-center gap-2"><Bell className="h-4 w-4"/>Special Events &amp; Announcements</p>
             <p className="text-green-700 text-sm mb-4">Special events, retreats, and diocesan activities will be announced from the pulpit and on the announcements board.</p>
-            <a href="/announcements" className="inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-full" style={{background:"#7c4c2e"}}>
+            <Link to="/announcements" className="inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-full" style={{background:"#7c4c2e"}}>
               View Announcements <ChevronRight className="h-4 w-4"/>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

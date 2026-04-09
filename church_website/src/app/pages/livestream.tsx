@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { useScrollReveal } from "../components/scroll-reveal"
+import { ParishPageHero } from "../components/parish-page-hero"
 import { ExternalLink, Wifi } from "lucide-react"
 import { supabase } from "../../lib/supabase"
 import { getFacebookEmbedSrc, getYouTubeEmbedSrc, isConfiguredStreamUrl } from "../../lib/livestreamEmbed"
@@ -42,7 +43,7 @@ function ClickableStreamPreview({
   const ok = isConfiguredStreamUrl(href)
   if (!ok) {
     return (
-      <div className="aspect-video rounded-xl border border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center gap-2 px-4 text-center text-gray-500 text-sm">
+      <div className="parish-glass-card aspect-video flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#c9a88a]/50 px-4 text-center text-sm text-gray-600">
         <span>Stream link not set yet.</span>
         <span className="text-xs text-gray-400">Check back after the next announcement.</span>
       </div>
@@ -154,32 +155,24 @@ export function Livestream() {
 
   return (
     <div>
-      <section
-        className="relative py-24 px-4 text-white overflow-hidden parallax-section"
-        style={{ backgroundImage: "url('/images/church.jpg')", minHeight: "420px" }}
+      <ParishPageHero
+        imageUrl="/images/livestream-hero-background.png"
+        eyebrow="Online"
+        title="Live Stream"
+        icon={
+          <span className="relative inline-flex">
+            <Wifi className="text-white drop-shadow-sm" aria-hidden />
+            <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-white" aria-hidden />
+          </span>
+        }
+        tagline="Join our Masses and parish events online. Watch on your preferred platform."
       >
-        <div className="absolute inset-0 hero-overlay" />
-        <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-          <img src="/images/church.jpg" alt="" className="w-72 h-72 object-contain" />
-        </div>
-        <div className="relative z-10 container mx-auto max-w-4xl text-center">
-          <div className="reveal flex justify-center mb-5">
-            <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-full border-2 border-emerald-300 bg-emerald-600/15">
-              <Wifi className="h-10 w-10 text-emerald-200" />
-              <span className="absolute top-1 right-1 w-3 h-3 rounded-full bg-emerald-400 live-dot border-2 border-white"></span>
-            </div>
-          </div>
-          <h1 className="reveal text-4xl md:text-5xl font-bold mb-4" data-delay="0.1s">
-            Live Stream
-          </h1>
-          <div className="w-20 h-1 mx-auto rounded mb-4" style={{ background: "linear-gradient(90deg, #8d5439, #6e3c28)" }}></div>
-          <p className="reveal text-green-100 text-lg max-w-xl mx-auto" data-delay="0.2s">
-            Join our Masses and parish events online. Watch on your preferred platform.
-          </p>
-        </div>
-      </section>
+        <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
+          When a stream link is set by the parish, previews below let you open YouTube, Facebook, or Zoom in a new tab for full playback.
+        </p>
+      </ParishPageHero>
 
-      <section className="py-16 px-4" style={{ background: "#f8efe2" }}>
+      <section className="parish-page-content-bg page-background-section py-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12 reveal">
             <p className="text-green-700 font-semibold text-sm uppercase tracking-wider mb-2">Watch Us Online</p>
@@ -201,7 +194,7 @@ export function Livestream() {
                 <h3 className="font-bold text-xl">YouTube</h3>
                 <p className="text-emerald-100 text-sm mt-1">Live & Recorded</p>
               </div>
-              <div className="p-5 bg-white space-y-4">
+              <div className="space-y-4 p-5 parish-glass-card">
                 <ClickableStreamPreview
                   href={streamConfig.youtube_url}
                   embedSrc={ytEmbed}
@@ -243,7 +236,7 @@ export function Livestream() {
                 <h3 className="font-bold text-xl">Facebook</h3>
                 <p className="text-blue-100 text-sm mt-1">Facebook Live</p>
               </div>
-              <div className="p-5 bg-white space-y-4">
+              <div className="space-y-4 p-5 parish-glass-card">
                 <ClickableStreamPreview
                   href={streamConfig.facebook_url}
                   embedSrc={fbEmbed}
@@ -282,7 +275,7 @@ export function Livestream() {
                 <h3 className="font-bold text-xl">Zoom</h3>
                 <p className="text-blue-100 text-sm mt-1">Interactive Sessions</p>
               </div>
-              <div className="p-5 bg-white space-y-4">
+              <div className="space-y-4 p-5 parish-glass-card">
                 <ClickableStreamPreview
                   href={streamConfig.zoom_meeting_url}
                   embedSrc={null}
@@ -341,7 +334,7 @@ export function Livestream() {
               { day: "Wednesday", time: "6:00 PM", event: "Bible Study", platform: "Zoom" },
               { day: "Special Events", time: "As Announced", event: "Parish Celebrations", platform: "All Platforms" },
             ].map((item, i) => (
-              <div key={i} className="reveal glass-white rounded-xl p-4 flex items-start gap-4 touch-card" data-delay={`${i * 0.1}s`}>
+              <div key={i} className="reveal parish-glass-card flex items-start gap-4 rounded-xl p-4 touch-card" data-delay={`${i * 0.1}s`}>
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold text-xs"
                   style={{ background: "#8d5439" }}
@@ -361,7 +354,7 @@ export function Livestream() {
         </div>
       </section>
 
-      <section className="py-12 px-4 bg-white">
+      <section className="parish-page-content-bg page-background-section py-12 px-4">
         <div className="container mx-auto max-w-3xl text-center reveal">
           <h2 className="text-2xl font-bold mb-3" style={{ color: "#6e3c28" }}>
             Stay Connected Online

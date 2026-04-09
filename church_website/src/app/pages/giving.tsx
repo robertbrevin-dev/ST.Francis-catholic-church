@@ -1,5 +1,6 @@
 import { Smartphone, Heart, ArrowRight, Phone, ClipboardList, Check, ShoppingBag, Building2, Banknote, Church, Handshake, BookOpen, Star, Music2, HandHeart, Hospital } from "lucide-react";
 import { Link } from "react-router";
+import { ParishPageHero } from "../components/parish-page-hero";
 import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF, PARISH_WHATSAPP_E164 } from "../../lib/parishContact";
 
 const GIVING_PURPOSES = [
@@ -16,19 +17,19 @@ const GIVING_PURPOSES = [
 export function Giving() {
   return (
     <div>
-      <section className="py-20 px-4 text-white" style={{ background: "linear-gradient(135deg, #37160a 0%, #a15c41 50%, #d8a98d 100%)" }}>
-        <div className="container mx-auto max-w-4xl text-center">
-          <Heart className="h-14 w-14 mx-auto mb-4 text-white" style={{ filter: "drop-shadow(0 0 24px rgba(52,211,153,0.85))" }} />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ textShadow: "0 0 18px rgba(52,211,153,0.55)" }}>Give / Sadaka</h1>
-          <div className="w-20 h-1 bg-yellow-400 mx-auto mb-4 rounded"></div>
-          <p className="text-green-200 text-lg max-w-xl mx-auto">
-            "Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, 
-            for God loves a cheerful giver." — 2 Corinthians 9:7
-          </p>
-        </div>
-      </section>
+      <ParishPageHero
+        imageUrl="/images/giving-hero-background.png"
+        eyebrow="Generosity"
+        title="Give / Sadaka"
+        icon={<Heart className="text-white drop-shadow-sm" aria-hidden />}
+        tagline='"Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver." — 2 Corinthians 9:7'
+      >
+        <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
+          Your generosity supports the parish, the poor, formation, liturgy, and mission. Use M-PESA Paybill below or speak to the parish office about other ways to give.
+        </p>
+      </ParishPageHero>
 
-      <section className="py-16 px-4" style={{ background: "linear-gradient(135deg, #f8efe2, #ecd5c5)" }}>
+      <section className="parish-page-content-bg page-background-section py-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-10">
             <p className="text-green-600 font-semibold text-sm uppercase tracking-wider mb-2">Easiest Way to Give</p>
@@ -37,7 +38,7 @@ export function Giving() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 items-start">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-green-100" style={{ boxShadow: "0 0 40px rgba(141,86,58,0.14)" }}>
+            <div className="parish-glass-card rounded-2xl shadow-lg overflow-hidden border border-green-100/80" style={{ boxShadow: "0 0 40px rgba(141,86,58,0.14)" }}>
               <div className="p-5 text-white" style={{ background: "linear-gradient(135deg, #7c4c2e, #ae7c5f)", boxShadow: "0 0 32px rgba(140,90,61,0.22)" }}>
                 <div className="flex items-center gap-3 mb-1">
                   <Smartphone className="h-6 w-6 text-yellow-300" />
@@ -73,7 +74,7 @@ export function Giving() {
                 <p className="text-green-950 text-4xl font-black tracking-widest">341370</p>
               </div>
 
-              <div className="bg-white rounded-2xl p-5 border border-green-100 shadow-sm">
+              <div className="parish-glass-card rounded-2xl p-5 border border-green-100/80 shadow-sm">
                 <h4 className="font-bold text-green-900 mb-3 flex items-center gap-2"><ClipboardList className="h-5 w-5" />Tips for Giving</h4>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex items-start gap-2"><Check className="h-4 w-4 text-green-500 mt-0.5" />Use your name as reference in M-PESA confirmation</li>
@@ -98,7 +99,7 @@ export function Giving() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-white">
+      <section className="parish-page-content-bg page-background-section py-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-green-900 mb-3">Other Ways to Give</h2>
@@ -121,7 +122,7 @@ export function Giving() {
         </div>
       </section>
 
-      <section className="py-16 px-4" style={{ background: "#f8efe2" }}>
+      <section className="parish-page-content-bg page-background-section py-16 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-green-900 mb-3">What Your Gift Supports</h2>
@@ -130,7 +131,7 @@ export function Giving() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {GIVING_PURPOSES.map((p,i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-emerald-100 hover:shadow-md transition-all text-center ministry-card" style={{ boxShadow: "0 0 24px rgba(141,86,58,0.12)" }}>
+              <div key={i} className="parish-glass-card rounded-2xl p-5 shadow-sm border border-emerald-100/80 hover:shadow-md transition-all text-center ministry-card" style={{ boxShadow: "0 0 24px rgba(141,86,58,0.12)" }}>
                 <span className="text-3xl block mb-2">{p.icon}</span>
                 <h3 className="font-bold text-green-900 text-sm mb-1">{p.title}</h3>
                 <p className="text-gray-500 text-xs leading-relaxed">{p.desc}</p>

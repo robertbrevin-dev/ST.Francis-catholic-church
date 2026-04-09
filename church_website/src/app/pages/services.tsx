@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { Phone, Church, HandHelping, Droplet, Sparkles, Cross, Handshake, HandHeart, ShieldCheck, BookOpen, Lightbulb } from "lucide-react"
 import { Link } from "react-router"
+import { ParishPageHero } from "../components/parish-page-hero"
 import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF } from "../../lib/parishContact"
 import { supabase } from "../../lib/supabase"
 
@@ -254,35 +255,26 @@ export function Services() {
 
   return (
     <div>
-      <section
-        className="py-20 px-4 text-white relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #3a1f13 0%, #7c4c2e 100%)" }}
+      <ParishPageHero
+        imageUrl="/images/services-hero-background.png"
+        eyebrow="Sacraments & pastoral care"
+        title="Parish Services"
+        icon={<Cross className="text-white drop-shadow-sm" aria-hidden />}
+        tagline="Sacraments and pastoral services offered at St. Francis Cheptarit Catholic Parish, Mosoriot, Nandi County"
       >
-        <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <Cross className="h-14 w-14 mx-auto mb-4 text-white" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Parish Services</h1>
-          <div className="w-20 h-1 bg-emerald-400 mx-auto mb-4 rounded"></div>
-          <p className="text-green-200 text-lg max-w-2xl mx-auto">
-            Sacraments and pastoral services offered at St. Francis Cheptarit Catholic Parish, Mosoriot, Nandi County
-          </p>
-        </div>
-      </section>
+        <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
+          In this moment at the altar, Fr. Richard prays the Eucharistic Prayer at Holy Mass: he holds the chalice and
+          raises the sacred host—the action by which, through the words of consecration, the Church believes bread and wine
+          become the Body and Blood of Christ. Every sacrament we offer flows from this same mystery: Christ present and
+          serving his people at St. Francis Cheptarit.
+        </p>
+      </ParishPageHero>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-gray-600 leading-relaxed text-lg">
-            The Sacraments are the living heart of the Catholic Church. At St. Francis Cheptarit, we celebrate 
-            all the Sacraments and offer a range of pastoral services to accompany our parishioners through every 
-            stage of life — from birth to death and into eternal life.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-10 px-4" style={{ background: "#f8efe2" }}>
+      <section className="parish-page-content-bg page-background-section py-10 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="space-y-6">
             {displayList.map((s) => (
-              <div key={s.key} className="bg-white rounded-2xl shadow-md overflow-hidden border border-green-100 hover:shadow-lg transition-all">
+              <div key={s.key} className="parish-glass-card rounded-2xl shadow-md overflow-hidden border border-green-100/80 hover:shadow-lg transition-all">
                 <div className="grid md:grid-cols-3">
                   <div
                     className="p-8 flex flex-col justify-center text-white"

@@ -1,0 +1,104 @@
+
+/* ============================================================
+   HERO — Sacred Gold Luxury Church Aesthetic
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap");
+
+.home-hero-title {
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #fed7aa 35%, #ffffff 55%, #e6c7ad 75%, #ffffff 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: hero-gold-shimmer 7s ease-in-out infinite;
+  text-shadow: none;
+}
+@keyframes hero-gold-shimmer {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.home-hero-subtitle {
+  letter-spacing: 0.03em;
+}
+.home-hero-tagline {
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+.home-hero-badge {
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(124,45,18,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.home-hero-logo {
+  box-shadow:
+    0 0 0 3px rgba(191,135,95,0.5),
+    0 0 0 8px rgba(191,135,95,0.15),
+    0 0 50px rgba(191,135,95,0.4),
+}
+.home-hero-btn-primary {
+}
+.home-hero-btn-primary:hover {
+}
+.home-hero-btn-ghost {
+}
+.home-hero-btn-ghost:hover {
+}
+
+/* Info Bar */
+.home-info-bar {
+}
+.home-info-item {
+  transition: background 0.2s ease;
+  border-radius: 10px;
+  padding: 10px 8px;
+}
+.home-info-label {
+  text-transform: uppercase;
+}
+.home-info-value {
+}
+
+/* Welcome Section */
+.home-welcome-heading {
+}
+.home-welcome-eyebrow {
+}
+
+/* Values Cards */
+.home-value-card {
+  position: relative;
+  overflow: hidden;
+}
+.home-value-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(253,215,110,0.8), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.home-value-card:hover::before { opacity: 1; }
+.home-value-icon {
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.home-value-title {
+}
+
+/* Section Headings */
+.home-section-heading {
+}
+.home-section-eyebrow {
+}
+
+/* Giving Section */
+.home-giving-number {
+}
+
+/* CTA Section */
+.home-cta-heading {
+}

@@ -1,23 +1,16 @@
-/** Same-origin path in dev (Vite proxy) and production (Vercel serverless). */
 export const USCCB_RSS_PATH = "/api/usccb-rss";
 
 export type DailyReadingDisplay = {
-  /** Short quote for the hero card (Reading I) */
   snippet: string;
-  /** e.g. "Acts 2:36-41" */
   reference: string;
-  /** Gospel citation, e.g. "John 20:11-18" */
   gospelReference: string;
-  /** Liturgical day title from RSS */
   dayTitle: string;
   link: string;
-  /** YYYY-MM-DD in America/New_York for this entry (USCCB calendar day) */
   usccbDateKey: string;
 };
 
 const USCCB_RSS_URL_DIRECT = "https://www.usccb.org/bible/readings/rss/index.cfm";
 
-/** Calendar date string for USCCB’s publication timezone (US Eastern). */
 export function dateKeyUsccbCalendar(d: Date): string {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/New_York",
@@ -78,10 +71,6 @@ function parseRssItems(xml: string): RawRssItem[] {
   return out;
 }
 
-/**
- * Pick the item for “today” on the USCCB calendar (US Eastern).
- * If that day is not in the feed yet, use the latest entry dated on or before today.
- */
 export function pickUsccbItemForToday(items: RawRssItem[]): RawRssItem | null {
   if (items.length === 0) return null;
 
@@ -121,9 +110,6 @@ function extractFromDescription(rawDesc: string): Pick<DailyReadingDisplay, "sni
   return { snippet, reference, gospelReference };
 }
 
-/**
- * Parses USCCB daily readings RSS and returns the entry for today’s USCCB calendar day.
- */
 export function parseUsccbDailyReadingsRss(xml: string): DailyReadingDisplay | null {
   const items = parseRssItems(xml);
   const item = pickUsccbItemForToday(items);
@@ -147,7 +133,6 @@ export function parseUsccbDailyReadingsRss(xml: string): DailyReadingDisplay | n
   };
 }
 
-/** Minimal fallback when RSS is unavailable (offline, static host without API). */
 export function getLocalFallbackReading(): DailyReadingDisplay {
   return {
     snippet: "The Lord is my shepherd; there is nothing I shall want.",
@@ -170,17 +155,13 @@ export async function fetchUsccbDailyReading(): Promise<DailyReadingDisplay> {
     const xml = await tryFetch(USCCB_RSS_PATH);
     const parsed = parseUsccbDailyReadingsRss(xml);
     if (parsed) return parsed;
-  } catch {
-    /* try direct (may fail in browser due to CORS) */
-  }
+  } catch {}
 
   try {
     const xml = await tryFetch(USCCB_RSS_URL_DIRECT);
     const parsed = parseUsccbDailyReadingsRss(xml);
     if (parsed) return parsed;
-  } catch {
-    /* use fallback */
-  }
+  } catch {}
 
   return getLocalFallbackReading();
 }

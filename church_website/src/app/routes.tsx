@@ -5,6 +5,12 @@ import { Home } from "./pages/home"
 import { About } from "./pages/about"
 import { MassTimes } from "./pages/mass-times"
 import { Ministries } from "./pages/ministries"
+import { CwaPage } from "./pages/cwa"
+import { CmaPage } from "./pages/cma"
+import { PmcPage } from "./pages/pmc"
+import { ChoirPage } from "./pages/choir"
+import { YouthPage } from "./pages/youth"
+import { CsaPage } from "./pages/csa"
 import { Services } from "./pages/services"
 import { Events } from "./pages/events"
 import { Announcements } from "./pages/announcements"
@@ -31,6 +37,12 @@ export const router = createBrowserRouter([
     { path: "about", Component: About },
     { path: "mass-times", Component: MassTimes },
     { path: "ministries", Component: Ministries },
+    { path: "ministries/cwa", Component: CwaPage },
+    { path: "ministries/cma", Component: CmaPage },
+    { path: "ministries/pmc", Component: PmcPage },
+    { path: "ministries/choir", Component: ChoirPage },
+    { path: "ministries/youth", Component: YouthPage },
+    { path: "ministries/csa", Component: CsaPage },
     { path: "services", Component: Services },
     { path: "events", Component: Events },
     { path: "announcements", Component: Announcements },

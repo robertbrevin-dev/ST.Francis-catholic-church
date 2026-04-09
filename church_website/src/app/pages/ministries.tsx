@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { Phone, Users, Music, BookOpen, Heart, Cross, Mic2, GraduationCap, Home, HandHeart, Church } from "lucide-react"
+import { Link } from "react-router"
 
 import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF } from "../../lib/parishContact"
 import { supabase } from "../../lib/supabase"
+import { ParishPageHero } from "../components/parish-page-hero"
 
 const MenIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
@@ -78,7 +80,7 @@ const FALLBACK_MINISTRIES = [
   { id:"youth", Icon: Users, title:"Youth Ministry", subtitle:"Faith · Fun · Future", description:"Our Youth Ministry gathers young people from the parish to grow together in Catholic faith, fellowship and service. The youth are the future of the Church.", activities:["Weekly youth meetings","Faith formation & catechesis","Sports and recreational activities","Youth camps and retreats","Community service and charity"], meets:"Every Saturday at 3:00 PM", contact:"Contact the Parish Priest", color:"#e65100", bg:"#fff3e0" },
   { id:"pmc", Icon: DoveIcon, title:"Parish Missionary Council (PMC)", subtitle:"Evangelization · Outreach · Mission", description:"The Parish Missionary Council coordinates missionary activities and evangelization efforts within and beyond the parish. PMC members are passionate about spreading the Good News.", activities:["Parish evangelization programs","Coordination of outreach missions","Support for missionary activities","Home visits and pastoral care","Supporting the Diocese of Kapsabet mission"], meets:"First Sunday of the month", contact:"Contact the Parish Priest", color:"#1565c0", bg:"#e3f2fd" },
   { id:"choir", Icon: Music, title:"Choir Ministry", subtitle:"Praise · Worship · Music", description:"Our dedicated choir ministers use their musical gifts to glorify God and enhance the celebration of the Eucharist and other sacraments at all Sunday Masses.", activities:["Rehearsals every Thursday","Sunday Mass worship","Special occasion performances","Liturgical music training","Annual choir festivals"], meets:"Thursday 6:00 PM (Rehearsals)", contact:"Speak to Choir Master", color:"#00695c", bg:"#e0f2f1" },
-  { id:"csa", Icon: GraduationCap, title:"Catholic Students Association (CSA)", subtitle:"Faith · Studies · Service", description:"The Catholic Students Association serves students within and around the parish, providing a nurturing environment to grow in Catholic faith and support each other academically and morally.", activities:["Student fellowship and prayer","Faith formation sessions","Academic encouragement and support","Mentorship programs","Outreach to students in need"], meets:"Sundays after Mass", contact:"Contact the Parish Office", color:"#827717", bg:"#f9fbe7" },
+  { id:"csa", Icon: GraduationCap, title:"Catholic Students Association (CSA)", subtitle:"Faith · Studies · Service", description:"The Catholic Students Association walks with students in Mosoriot and beyond—especially those at Koitaleel Samoei University College (KSUC), right here in our community. CSA helps Catholic students live their faith on campus and in the lecture hall: Sunday Mass at St. Francis Cheptarit, the sacraments, prayer, and honest friendship so that study and career serve God and neighbour.", activities:["Student fellowship and prayer at the parish","Faith formation for university and college students","Walking with KSUC students—our neighbours in learning","Academic encouragement and moral support","Mentorship and outreach to students in need","Linking campus life with parish life in Mosoriot"], meets:"Sundays after Mass", contact:"Contact the Parish Office", color:"#827717", bg:"#f9fbe7" },
   { id:"catechism", Icon: BookOpen, title:"Catechism / CRE Classes", subtitle:"Formation · Sacraments · Faith", description:"Religious education and catechism classes prepare children and adults for the Sacraments of Initiation — Baptism, First Holy Communion, and Confirmation.", activities:["Sunday catechism for children","Adult faith formation","Sacramental preparation","Prayer and Scripture study","Annual catechism day celebration"], meets:"Sundays 9:00 AM", contact:"Contact Parish Catechists", color:"#4a148c", bg:"#f3e5f5" },
   { id:"altar-servers", Icon: AltarIcon, title:"Altar Servers", subtitle:"Service · Reverence · Dedication", description:"Altar servers assist the priest during the celebration of Mass and other liturgical functions. This ministry forms young people in a spirit of service and reverence.", activities:["Serving at all Masses","Training for new servers (age 10+)","Altar servers' retreats","Annual altar servers' day"], meets:"As scheduled for Masses", contact:"Speak to the Parish Priest", color:"#bf360c", bg:"#fbe9e7" },
   { id:"scc", Icon: CommunityIcon, title:"Small Christian Communities (SCCs)", subtitle:"Prayer · Sharing · Community", description:"The parish is organised into Small Christian Communities that meet in homes throughout the area, providing grassroots faith sharing, prayer, and community support.", activities:["Weekly Scripture reflection","Communal prayer and sharing","Support for members in need","Reporting to the parish council","Participating in parish events"], meets:"Weekly in homes", contact:"Contact the Parish Office", color:"#2e7d32", bg:"#e8f5e9" },
@@ -117,6 +119,7 @@ export function Ministries() {
       const Icon = MINISTRY_ICONS[m.slug] || Users
       return {
         key: m.id,
+        slug: m.slug,
         Icon,
         title: m.title,
         subtitle: m.subtitle,
@@ -130,6 +133,7 @@ export function Ministries() {
     })
       : FALLBACK_MINISTRIES.map((m) => ({
       key: m.id,
+      slug: m.id,
       Icon: m.Icon,
       title: m.title,
       subtitle: m.subtitle,
@@ -143,40 +147,31 @@ export function Ministries() {
 
   return (
     <div>
-      <section className="py-20 px-4 text-white relative overflow-hidden" style={{ background: "linear-gradient(135deg, #3a1f13 0%, #7c4c2e 100%)" }}>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-72 h-72 rounded-full border-4 border-yellow-400 -translate-y-1/2 translate-x-1/4"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full border-4 border-white -translate-x-1/4 translate-y-1/2"></div>
-        </div>
-        <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <div className="flex justify-center mb-4">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="1.5" className="h-14 w-14">
-              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" strokeLinecap="round"/>
-              <circle cx="9" cy="7" r="4" strokeLinecap="round"/>
-              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" strokeLinecap="round"/>
-            </svg>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Ministries &amp; Groups</h1>
-          <div className="w-20 h-1 bg-yellow-400 mx-auto mb-4 rounded"></div>
-          <p className="text-xl text-green-200 max-w-2xl mx-auto">Find your place to serve, grow, and belong in the St. Francis Cheptarit Parish community</p>
-        </div>
-      </section>
+      <ParishPageHero
+        imageUrl="/images/ministries-hero-background.png"
+        eyebrow="Parish life"
+        title="Ministries & Groups"
+        icon={<Users className="text-white drop-shadow-sm" aria-hidden />}
+        tagline="Find your place to serve, grow, and belong in the St. Francis Cheptarit Parish community"
+      >
+        <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
+          At St. Francis Cheptarit, we believe every person has unique gifts to offer. Our ministries and groups provide opportunities to grow in faith, serve God, and build meaningful relationships within our parish and the wider Mosoriot community.
+        </p>
+      </ParishPageHero>
 
-      <section className="py-12 px-4 bg-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-gray-600 leading-relaxed text-lg">
-            At St. Francis Cheptarit, we believe every person has unique gifts to offer. Our ministries and groups provide opportunities to grow in faith, serve God, and build meaningful relationships within our parish and the wider Mosoriot community.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-12 px-4" style={{ background: "#f8efe2" }}>
+      <section className="parish-page-content-bg page-background-section py-12 px-4">
         <div className="container mx-auto max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayList.map((m) => {
               const { Icon } = m
+              const isCmaCard = m.title.includes("Catholic Men Association")
+              const isCwaCard = m.title.includes("Catholic Women Association")
+              const isPmcCard = m.title.includes("Parish Missionary Council")
+              const isChoirCard = m.title.includes("Choir Ministry")
+              const isYouthCard = m.title.includes("Youth Ministry")
+              const isCsaCard = m.slug === "csa" || m.title.includes("Catholic Students Association")
               return (
-                <div key={m.key} className="ministry-card bg-white rounded-2xl shadow-md overflow-hidden border border-green-100">
+                <div key={m.key} className="ministry-card parish-glass-card rounded-2xl shadow-md overflow-hidden border border-green-100/80">
                   <div className="p-5 text-white flex items-center gap-3" style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}>
                     <div className="opacity-90"><Icon /></div>
                     <div>
@@ -186,6 +181,12 @@ export function Ministries() {
                   </div>
                   <div className="p-5 space-y-4">
                     <p className="text-gray-600 text-sm leading-relaxed">{m.description}</p>
+                    {isCsaCard ? (
+                      <p className="rounded-lg border border-[#827717]/20 bg-[#f9fbe7]/60 px-3 py-2.5 text-xs leading-relaxed text-gray-700">
+                        Photos and updates for CSA—including Koitaleel Samoei University College (KSUC)—live on the{" "}
+                        <strong>Catholic Students Association</strong> page.
+                      </p>
+                    ) : null}
                     <div className="rounded-xl p-3" style={{ background: m.bg }}>
                       <p className="text-xs font-bold mb-2" style={{ color: m.color }}>Activities</p>
                       <ul className="space-y-1">
@@ -200,6 +201,60 @@ export function Ministries() {
                       <div><span className="text-gray-400">Meets: </span><span className="font-medium text-gray-700">{m.meets}</span></div>
                       <span className="text-gray-500">{m.contact}</span>
                     </div>
+                    {isCwaCard ? (
+                      <Link
+                        to="/ministries/cwa"
+                        className="inline-flex items-center justify-center w-full rounded-lg px-3 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}
+                      >
+                        Open CWA Page
+                      </Link>
+                    ) : null}
+                    {isCmaCard ? (
+                      <Link
+                        to="/ministries/cma"
+                        className="inline-flex items-center justify-center w-full rounded-lg px-3 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}
+                      >
+                        Open CMA Page
+                      </Link>
+                    ) : null}
+                    {isPmcCard ? (
+                      <Link
+                        to="/ministries/pmc"
+                        className="inline-flex items-center justify-center w-full rounded-lg px-3 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}
+                      >
+                        Open PMC Page
+                      </Link>
+                    ) : null}
+                    {isChoirCard ? (
+                      <Link
+                        to="/ministries/choir"
+                        className="inline-flex items-center justify-center w-full rounded-lg px-3 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}
+                      >
+                        Open Choir Page
+                      </Link>
+                    ) : null}
+                    {isYouthCard ? (
+                      <Link
+                        to="/ministries/youth"
+                        className="inline-flex items-center justify-center w-full rounded-lg px-3 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}
+                      >
+                        Open Youth Page
+                      </Link>
+                    ) : null}
+                    {isCsaCard ? (
+                      <Link
+                        to="/ministries/csa"
+                        className="inline-flex items-center justify-center w-full rounded-lg px-3 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                        style={{ background: `linear-gradient(135deg, ${m.color}, ${m.color}cc)` }}
+                      >
+                        Open CSA page (photos &amp; KSUC)
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               )

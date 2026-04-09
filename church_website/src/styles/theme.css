@@ -4,7 +4,7 @@
   --font-size: 16px;
   --background: #f8efe2;
   --foreground: #4c2b1c;
-  --card: #f4ede6;
+  --card: rgba(244, 237, 230, 0.72);
   --card-foreground: #432813;
   --popover: #ecd5c5;
   --popover-foreground: #4c2b1c;
@@ -112,11 +112,12 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(180deg, rgba(253, 250, 246, 0.98) 0%, rgba(245, 236, 226, 0.96) 45%, rgba(248, 242, 235, 0.98) 100%);
   }
-  .bg-white { background-color: #f8efe2 !important; }
-  .bg-gray-50 { background-color: #f7ede4 !important; }
+  .bg-white { background-color: rgba(248, 239, 228, 0.68) !important; }
+  .bg-gray-50 { background-color: rgba(247, 237, 228, 0.58) !important; }
   .bg-neutral-100 { background-color: #edd6c6 !important; }
   .border-white { border-color: rgba(140,90,61,0.2) !important; }
   .text-gray-500 { color: #6c412a !important; }
@@ -182,7 +183,6 @@
   50% { border-color: #a46e4e; }
 }
 
-/* Enhanced Scroll Reveal Animations */
 @keyframes blurIn {
   from { opacity: 0; filter: blur(12px); }
   to { opacity: 1; filter: blur(0); }
@@ -212,7 +212,6 @@
   to { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-/* Animated Background Elements */
 @keyframes orb-float-1 {
   0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
   25% { transform: translate(20px, -30px) scale(1.1); opacity: 0.5; }
@@ -296,7 +295,6 @@
   transform: perspective(600px) rotateY(0deg);
 }
 
-/* Stagger animations for children */
 .stagger-children .stagger-item {
   opacity: 0;
   transform: translateY(30px);
@@ -312,7 +310,6 @@
 .animate-pulse-green { animation: pulseGreen 2.5s infinite; }
 .live-dot { animation: liveBlink 1.5s ease-in-out infinite; }
 
-/* Phone / email links: reliable tap → dialer or mail app on mobile */
 a[href^="tel:"],
 a[href^="mailto:"] {
   touch-action: manipulation;
@@ -374,7 +371,6 @@ a[href^="mailto:"] {
   margin: 12px 0 0;
 }
 
-/* Animated Background System */
 .animated-bg-container {
   position: fixed;
   top: 0;
@@ -434,7 +430,6 @@ a[href^="mailto:"] {
   mix-blend-mode: overlay;
 }
 
-/* Video-like background with animated sections */
 .page-background-section {
   position: relative;
   overflow: hidden;
@@ -463,7 +458,10 @@ a[href^="mailto:"] {
   z-index: 2;
 }
 
-/* Brown theme overrides for Tailwind green/emerald utilities */
+.parish-page-content-bg {
+  background: linear-gradient(180deg, #faf6f1 0%, #f8efe2 45%, #f5ebe0 100%);
+}
+
 .text-green-50, .text-emerald-50 { color: #f8ede2 !important; }
 .text-green-100, .text-emerald-100 { color: #eed1bf !important; }
 .text-green-200, .text-emerald-200 { color: #d6a782 !important; }
@@ -548,9 +546,28 @@ a[href^="mailto:"] {
   -webkit-backdrop-filter: blur(12px);
 }
 .glass-white {
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(141, 84, 57, 0.14);
+}
+
+.parish-main-bg {
+  background: linear-gradient(180deg, rgba(253, 250, 246, 0.88) 0%, rgba(245, 236, 226, 0.85) 45%, rgba(248, 242, 235, 0.9) 100%);
+}
+.parish-glass-panel {
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 40px rgba(58, 31, 19, 0.08);
+}
+.parish-glass-card {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(141, 84, 57, 0.16);
+  box-shadow: 0 4px 24px rgba(58, 31, 19, 0.05);
 }
 
 .ministry-card {
@@ -584,3 +601,4 @@ a[href^="mailto:"] {
 @media (max-width: 768px) {
   .parallax-section { background-attachment: scroll; }
 }
+

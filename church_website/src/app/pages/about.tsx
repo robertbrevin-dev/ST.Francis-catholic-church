@@ -157,15 +157,15 @@ function StoryGallery({ story, variant }: StoryGalleryProps) {
         <CarouselPrevious
           className={
             navSm
-              ? "left-2 top-1/2 z-20 size-9 -translate-y-1/2 border-white/80 bg-white/95 text-[#143d2c] shadow-md hover:bg-white sm:left-4 sm:size-10"
-              : "left-2 top-1/2 z-20 size-8 -translate-y-1/2 border-white/80 bg-white/95 text-[#143d2c] sm:left-3 sm:size-9"
+              ? "left-2 top-1/2 z-20 size-9 -translate-y-1/2 border-white/80 bg-white/80 text-[#143d2c] shadow-md backdrop-blur-md hover:bg-white/95 sm:left-4 sm:size-10"
+              : "left-2 top-1/2 z-20 size-8 -translate-y-1/2 border-white/80 bg-white/80 text-[#143d2c] backdrop-blur-md hover:bg-white/95 sm:left-3 sm:size-9"
           }
         />
         <CarouselNext
           className={
             navSm
-              ? "right-2 top-1/2 z-20 size-9 -translate-y-1/2 border-white/80 bg-white/95 text-[#143d2c] shadow-md hover:bg-white sm:right-4 sm:size-10"
-              : "right-2 top-1/2 z-20 size-8 -translate-y-1/2 border-white/80 bg-white/95 text-[#143d2c] sm:right-3 sm:size-9"
+              ? "right-2 top-1/2 z-20 size-9 -translate-y-1/2 border-white/80 bg-white/80 text-[#143d2c] shadow-md backdrop-blur-md hover:bg-white/95 sm:right-4 sm:size-10"
+              : "right-2 top-1/2 z-20 size-8 -translate-y-1/2 border-white/80 bg-white/80 text-[#143d2c] backdrop-blur-md hover:bg-white/95 sm:right-3 sm:size-9"
           }
         />
       </Carousel>
@@ -234,8 +234,13 @@ export function About() {
     <div className="overflow-x-hidden">
       <section
         className="relative overflow-hidden py-20 px-4 text-white page-background-section sm:py-28"
-        style={{ background: "linear-gradient(135deg, #2a150c 0%, #3a1f13 42%, #7c4c2e 100%)" }}
+        style={{ backgroundImage: "url('/images/about-background-styled.png')", backgroundPosition: "center 42%", backgroundSize: "cover" }}
       >
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(145deg, rgba(26,14,9,0.72) 0%, rgba(58,31,19,0.7) 45%, rgba(33,54,40,0.62) 100%)" }}
+          aria-hidden
+        />
         <div
           className="pointer-events-none absolute -inset-40 opacity-[0.2] blur-3xl"
           style={{ background: "radial-gradient(ellipse at 30% 20%, #f59e0b 0%, transparent 55%)" }}
@@ -265,7 +270,7 @@ export function About() {
 
       <nav
         aria-label="About page sections"
-        className="border-b border-[#e5d9ce] bg-[#fdfaf6] py-3.5 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset]"
+        className="border-b border-[#e5d9ce]/80 bg-[#fdfaf6]/85 py-3.5 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset] backdrop-blur-md"
       >
         <div className="container mx-auto max-w-6xl px-4">
           <p className="mb-2.5 text-center text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[#8b7355]">On this page</p>
@@ -337,13 +342,13 @@ export function About() {
           </ScrollReveal>
 
           <ScrollReveal className="mt-14 sm:mt-16" direction="up" duration={0.65}>
-            <div className="rounded-[1.75rem] border border-[#e8ddd4] bg-gradient-to-b from-white/90 to-[#fdfaf6]/95 p-6 shadow-xl shadow-[#3a1f13]/[0.06] ring-1 ring-white/80 sm:p-8 md:p-10">
+            <div className="parish-glass-card rounded-[1.75rem] p-6 shadow-xl shadow-[#3a1f13]/[0.06] sm:p-8 md:p-10">
               <AboutSectionHeader
                 eyebrow="Parish life"
                 title="Easter with our children after Mass"
                 subtitle="After we celebrate the Lord’s Resurrection at Mass, our parish family continues the joy outdoors — a moment to thank God together and be with our young people. Rev. Dr. Fr. Richard shares fellowship with the children in front of our church, in the hope of the Risen Christ."
               />
-              <div className="mx-auto mb-10 max-w-2xl rounded-2xl border-l-4 border-amber-400 bg-white/90 p-5 shadow-sm ring-1 ring-[#e8ddd4]/80 sm:p-6">
+              <div className="parish-glass-card mx-auto mb-10 max-w-2xl rounded-2xl border-l-4 border-amber-400 p-5 shadow-sm ring-1 ring-[#e8ddd4]/60 sm:p-6">
                 <p className="text-sm italic leading-relaxed text-[#143d2c] sm:text-base">
                   &ldquo;Let the children come to me; do not prevent them, for the kingdom of God belongs to such as these.&rdquo;
                 </p>
@@ -392,7 +397,7 @@ export function About() {
         </div>
       </section>
 
-      <section id="mission-vision" className="scroll-mt-28 bg-white py-16 px-4 sm:scroll-mt-32 sm:py-20">
+      <section id="mission-vision" className="scroll-mt-28 py-16 px-4 sm:scroll-mt-32 sm:py-20">
         <div className="container mx-auto max-w-5xl">
           <ScrollReveal>
             <AboutSectionHeader
@@ -471,7 +476,7 @@ export function About() {
                     God&apos;s creation. He gave us the Canticle of the Sun and the Prayer of St. Francis.
                   </p>
                 </div>
-                <div className="mt-6 rounded-2xl border-l-4 border-amber-500 bg-white/95 p-5 shadow-md ring-1 ring-white/80">
+                <div className="parish-glass-card mt-6 rounded-2xl border-l-4 border-amber-500 p-5 shadow-md ring-1 ring-white/40">
                   <p className="text-sm italic leading-relaxed text-[#143d2c]">
                     &ldquo;Lord, make me an instrument of your peace. Where there is hatred, let me sow love; where there is injury,
                     pardon; where there is doubt, faith…&rdquo;
@@ -501,7 +506,7 @@ export function About() {
             />
           </ScrollReveal>
           <ScrollReveal>
-            <div className="mx-auto max-w-3xl rounded-3xl border border-[#e0d4c8] bg-white/90 p-8 shadow-xl shadow-[#7c4c2e]/[0.07] ring-1 ring-white sm:p-10">
+            <div className="parish-glass-card mx-auto max-w-3xl rounded-3xl p-8 shadow-xl shadow-[#7c4c2e]/[0.07] sm:p-10">
               <div className="mb-6 flex justify-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#143d2c]/8 text-[#143d2c]">
                   <Building2 className="h-6 w-6" aria-hidden />
@@ -528,7 +533,7 @@ export function About() {
 
       <section
         id="community-moments"
-        className="relative scroll-mt-28 overflow-hidden bg-gradient-to-b from-[#fbf9f5] via-white to-[#f3ebe3] py-14 px-4 sm:scroll-mt-32 sm:py-16 md:py-20 sm:px-6"
+        className="relative scroll-mt-28 overflow-hidden bg-gradient-to-b from-[#fbf9f5] via-[#faf6f0]/95 to-[#f3ebe3] py-14 px-4 sm:scroll-mt-32 sm:py-16 md:py-20 sm:px-6"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(124,76,46,0.08),transparent)]" aria-hidden />
         <div className="container relative mx-auto max-w-6xl">
@@ -543,7 +548,7 @@ export function About() {
           {storiesLoading ? (
             <div className="py-16 text-center text-sm text-gray-500 sm:text-base">Loading community moments…</div>
           ) : stories.length === 0 ? (
-            <div className="mx-auto max-w-3xl rounded-3xl border border-[#e0d4c8] bg-white/80 px-6 py-12 text-center shadow-lg shadow-[#7c4c2e]/5 backdrop-blur-sm">
+            <div className="parish-glass-card mx-auto max-w-3xl rounded-3xl px-6 py-12 text-center shadow-lg shadow-[#7c4c2e]/5">
               <Sparkles className="mx-auto mb-4 h-10 w-10 text-[#5a7d5c]" />
               <h3 className="mb-2 text-xl font-bold text-[#143d2c]">More parish stories coming soon</h3>
               <p className="text-gray-600">
@@ -555,10 +560,10 @@ export function About() {
               {heroStory && (
                 <div
                   key={heroStory.id}
-                  className="flex flex-col gap-8 rounded-[1.75rem] border border-[#e8ddd4]/90 bg-white/70 p-4 shadow-xl shadow-[#3a1f13]/[0.06] ring-1 ring-white/80 backdrop-blur-sm sm:gap-10 sm:p-6 lg:grid lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:items-center lg:gap-10 lg:p-8"
+                  className="parish-glass-card flex flex-col gap-8 rounded-[1.75rem] p-4 shadow-xl shadow-[#3a1f13]/[0.06] sm:gap-10 sm:p-6 lg:grid lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:items-center lg:gap-10 lg:p-8"
                 >
                   <StoryGallery story={heroStory} variant="hero" />
-                  <div className="flex flex-col justify-center rounded-2xl border border-[#e8ddd4]/80 bg-gradient-to-br from-white via-[#fdfaf6] to-[#f5ebe0] p-6 shadow-inner sm:rounded-3xl sm:p-8 lg:p-10">
+                  <div className="parish-glass-card flex flex-col justify-center rounded-2xl p-6 shadow-inner sm:rounded-3xl sm:p-8 lg:p-10">
                     <div className="mb-4 flex flex-wrap items-center gap-2">
                       <span className="inline-flex items-center rounded-full bg-[#e8f4ea] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[#143d2c] sm:text-xs">
                         Latest
@@ -601,7 +606,7 @@ export function About() {
                     </div>
                     <p className="mb-5 text-[0.9375rem] leading-relaxed text-gray-700 sm:text-base">{heroStory.description}</p>
                     {heroStory.impact && (
-                      <div className="rounded-2xl border border-amber-200/80 bg-white/90 p-4 sm:p-5">
+                      <div className="parish-glass-card rounded-2xl border border-amber-200/80 p-4 sm:p-5">
                         <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-900/90">Impact</p>
                         <p className="text-sm leading-relaxed text-gray-700 sm:text-[0.9375rem]">{heroStory.impact}</p>
                       </div>
@@ -614,12 +619,12 @@ export function About() {
                 {gridStories.map((story) => (
                   <article
                     key={story.id}
-                    className="group flex flex-col overflow-hidden rounded-2xl border border-[#e8ddd4]/90 bg-white/90 shadow-md shadow-[#3a1f13]/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#3a1f13]/[0.08] sm:rounded-3xl"
+                    className="group parish-glass-card flex flex-col overflow-hidden rounded-2xl shadow-md shadow-[#3a1f13]/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#3a1f13]/[0.08] sm:rounded-3xl"
                   >
                     <div className="relative w-full overflow-hidden">
                       <StoryGallery story={story} variant="card" />
                       <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-2 sm:left-4 sm:top-4">
-                        <span className="rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-semibold text-[#143d2c] shadow-sm backdrop-blur-sm sm:text-xs">
+                        <span className="rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-semibold text-[#143d2c] shadow-sm backdrop-blur-md sm:text-xs">
                           {story.occasion_type}
                         </span>
                         {story.is_featured && (
@@ -671,7 +676,7 @@ export function About() {
         </div>
       </section>
 
-      <section id="substations" className="scroll-mt-28 bg-white py-16 px-4 sm:scroll-mt-32 sm:py-20">
+      <section id="substations" className="scroll-mt-28 py-16 px-4 sm:scroll-mt-32 sm:py-20">
         <div className="container mx-auto max-w-5xl">
           <ScrollReveal>
             <AboutSectionHeader
@@ -684,7 +689,7 @@ export function About() {
             <ScrollReveal>
               <div className="flex h-full flex-col rounded-3xl border border-[#c8e6c9]/80 bg-gradient-to-br from-[#f4faf4] to-[#e8f5e9] p-8 shadow-lg shadow-[#143d2c]/[0.06] transition-all hover:shadow-xl md:p-9">
                 <div className="mb-5 flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-[#143d2c]/10">
+                  <div className="parish-glass-card flex h-12 w-12 items-center justify-center rounded-2xl shadow-sm ring-1 ring-[#143d2c]/12">
                     <Church className="h-6 w-6 text-[#143d2c]" aria-hidden />
                   </div>
                   <h3 className="font-serif text-xl font-bold text-[#143d2c] sm:text-2xl">St. Lawrence Tebeson</h3>
@@ -708,7 +713,7 @@ export function About() {
             </ScrollReveal>
 
             <ScrollReveal delay="80ms">
-              <div className="flex h-full flex-col rounded-3xl border border-[#e0d4c8] bg-white/95 p-8 shadow-lg shadow-[#3a1f13]/[0.05] ring-1 ring-white md:p-9">
+              <div className="parish-glass-card flex h-full flex-col rounded-3xl p-8 shadow-lg shadow-[#3a1f13]/[0.05] md:p-9">
                 <h3 className="mb-2 font-serif text-xl font-bold text-[#143d2c]">Substation services</h3>
                 <p className="mb-6 text-sm text-gray-600">What the Tebeson community can count on from our parish.</p>
                 <ul className="space-y-4">
@@ -771,7 +776,7 @@ export function About() {
                   </span>
                 );
                 const cardClass =
-                  "flex items-start gap-4 rounded-2xl border border-[#e0d4c8] bg-white/90 p-4 shadow-sm ring-1 ring-white/80 transition-colors sm:p-4";
+                  "parish-glass-card flex items-start gap-4 rounded-2xl p-4 shadow-sm transition-colors sm:p-4";
                 if (!("href" in item) || !item.href) {
                   return (
                     <div key={i} className={cardClass}>
@@ -787,7 +792,7 @@ export function About() {
                   <a
                     key={i}
                     href={item.href}
-                    className={`${cardClass} no-underline text-inherit hover:border-[#c9a06c]/50 hover:bg-white active:bg-[#fdfaf6]`}
+                    className={`${cardClass} no-underline text-inherit hover:border-[#c9a06c]/40 hover:shadow-md active:bg-white/25`}
                     {...("ariaLabel" in item && item.ariaLabel ? { "aria-label": item.ariaLabel } : {})}
                   >
                     {ico}

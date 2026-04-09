@@ -1,29 +1,26 @@
-import { Link } from "react-router";
 import { Phone, Clock, Sun, Sunrise, Sparkles, Cross } from "lucide-react";
 
-import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF } from "../../lib/parishContact";
+import { ParishPageHero } from "../components/parish-page-hero"
+import { PARISH_PHONE_DISPLAY, PARISH_TEL_HREF } from "../../lib/parishContact"
 
 export function MassTimes() {
   return (
     <div>
-      <section className="py-20 px-4 text-white" style={{ background: "linear-gradient(135deg, #3a1f13 0%, #7c4c2e 100%)" }}>
-        <div className="container mx-auto max-w-4xl text-center">
-          <Clock className="h-14 w-14 mx-auto mb-4 text-white" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Mass Times</h1>
-          <div className="w-20 h-1 bg-yellow-400 mx-auto mb-4 rounded"></div>
-          <p className="text-green-200 text-lg">Join us to worship God through the Holy Eucharist</p>
-        </div>
-      </section>
+      <ParishPageHero
+        imageUrl="/images/mass-times-hero-background.png"
+        eyebrow="Worship with us"
+        title="Mass Times"
+        icon={<Clock className="text-white drop-shadow-sm" aria-hidden />}
+        tagline="Join us to worship God through the Holy Eucharist"
+      >
+        <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
+          The Holy Eucharist is the centre of our parish life. All are welcome to attend Mass at St. Francis Cheptarit Catholic Parish.
+          Mass times may vary during special liturgical seasons — please check the announcements board for any changes.
+        </p>
+      </ParishPageHero>
 
-      <section className="py-16 px-4 bg-white">
+      <section className="parish-page-content-bg page-background-section px-4 pb-16 pt-2">
         <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-10">
-            <p className="text-gray-600 leading-relaxed text-lg">
-              The Holy Eucharist is the centre of our parish life. All are welcome to attend Mass at St. Francis Cheptarit Catholic Parish.
-              Mass times may vary during special liturgical seasons — please check the announcements board for any changes.
-            </p>
-          </div>
-
           <div className="space-y-6">
             <div className="rounded-2xl overflow-hidden shadow-md border border-green-100">
               <div className="p-5 text-white flex items-center gap-3" style={{ background: "linear-gradient(135deg, #7c4c2e, #ae7c5f)" }}>
@@ -96,7 +93,7 @@ export function MassTimes() {
               </div>
               <div className="p-6">
                 <p className="text-gray-600 mb-4">
-                  Special Masses are celebrated on Holy Days of Obligation and major feast days. 
+                  Special Masses are celebrated on Holy Days of Obligation and major feast days.
                   Watch the announcements board for specific times and dates.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-3">
@@ -120,8 +117,8 @@ export function MassTimes() {
           <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
             <p className="text-yellow-800 font-semibold mb-2">📢 Important Notice</p>
             <p className="text-yellow-700 text-sm leading-relaxed">
-              Mass times may change during Advent, Lent, Easter, and other special liturgical seasons. 
-              Please check the parish announcements board, attend Sunday Mass for notices, or contact 
+              Mass times may change during Advent, Lent, Easter, and other special liturgical seasons.
+              Please check the parish announcements board, attend Sunday Mass for notices, or contact
               the parish office for the most current schedule.
             </p>
           </div>
