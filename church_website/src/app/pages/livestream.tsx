@@ -59,7 +59,7 @@ function ClickableStreamPreview({
           className="absolute inset-0 h-full w-full border-0 pointer-events-none"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
-          loading="lazy"
+          loading="eager"
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center p-6 text-white">{fallback}</div>

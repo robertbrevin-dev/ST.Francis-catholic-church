@@ -365,7 +365,7 @@ export function About() {
                         src="/images/easter-after-mass-1.png"
                         alt="Rev. Dr. Fr. Richard with parish children in front of St. Francis Cheptarit church after Easter Mass"
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                        loading="lazy"
+                        loading="eager"
                       />
                     </div>
                   </div>
@@ -383,7 +383,7 @@ export function About() {
                         src="/images/easter-after-mass-2.png"
                         alt="Community gathered with Rev. Dr. Fr. Richard and youth outside the parish church on Easter"
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                        loading="lazy"
+                        loading="eager"
                       />
                     </div>
                   </div>
@@ -696,16 +696,16 @@ export function About() {
                 </div>
                 <div className="section-divider-left mb-5" />
                 <p className="mb-4 text-[0.9375rem] leading-relaxed text-gray-700">
-                  St. Lawrence Tebeson is an important outstation chapel of our parish, serving the Catholic faithful in the Tebeson area
+                  St. Lawrence Tebeson is an important outstation church of our parish, serving the Catholic faithful in the Tebeson area
                   and surrounding communities.
                 </p>
                 <p className="mb-6 text-[0.9375rem] leading-relaxed text-gray-700">
                   The chapel is a place of worship, prayer, and community for local families — Mass and sacraments closer to home. Through
-                  this substation, the mission of St. Francis Cheptarit reaches further in faith.
+                  this church, the mission of St. Francis Cheptarit reaches further in faith.
                 </p>
                 <div className="mt-auto rounded-2xl border border-amber-200/90 bg-amber-50/80 p-4 ring-1 ring-amber-100/80">
                   <p className="text-sm leading-relaxed text-gray-700">
-                    <strong className="text-[#143d2c]">Parish commitment:</strong> We maintain St. Lawrence Tebeson as an active centre for
+                    <strong className="text-[#143d2c]">Parish commitment:</strong> We maintain St. Lawrence Tebeson Church as an active centre for
                     spiritual growth and community service in that region.
                   </p>
                 </div>
@@ -718,10 +718,10 @@ export function About() {
                 <p className="mb-6 text-sm text-gray-600">What the Tebeson community can count on from our parish.</p>
                 <ul className="space-y-4">
                   {[
-                    { icon: "⛪", label: "Sunday worship", desc: "Regular Mass celebrations for the Tebeson community" },
-                    { icon: "💒", label: "Sacraments", desc: "Confession, Eucharist, and community prayer" },
-                    { icon: "👨‍👩‍👧‍👦", label: "Community events", desc: "Gatherings, prayer groups, and faith formation" },
-                    { icon: "✝️", label: "Pastoral care", desc: "Spiritual guidance and support from our clergy" },
+                    { icon: "", label: "Sunday worship", desc: "Regular Mass celebrations for the Tebeson community" },
+                    { icon: "", label: "Sacraments", desc: "Confession, Eucharist, and community prayer" },
+                    { icon: "‍‍‍", label: "Community events", desc: "Gatherings, prayer groups, and faith formation" },
+                    { icon: "", label: "Pastoral care", desc: "Spiritual guidance and support from our clergy" },
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-4 rounded-xl border border-[#eef4ee] bg-[#fafcf9] p-3 sm:p-4">
                       <span className="text-2xl leading-none" aria-hidden>

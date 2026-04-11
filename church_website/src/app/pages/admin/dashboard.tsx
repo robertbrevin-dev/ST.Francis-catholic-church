@@ -23,7 +23,7 @@ export function AdminDashboard() {
       <div className="admin-welcome">
         <div className="admin-welcome-card">
           <h2>Good day, {profile?.display_name ?? "administrator"}</h2>
-          <p>St. Francis Cheptarit Catholic Parish � Diocese of Kapsabet</p>
+          <p>St. Francis Cheptarit Catholic Parish  Diocese of Kapsabet</p>
         </div>
       </div>
       <p className="admin-section-label">Content management</p>

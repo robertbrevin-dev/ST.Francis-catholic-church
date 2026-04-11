@@ -102,7 +102,7 @@ export function Announcements() {
         tagline="Stay up to date with everything happening at St. Francis Cheptarit Catholic Parish"
       >
         <p className="text-center font-serif text-lg leading-relaxed text-[#3a1f13] [text-shadow:0_1px_2px_rgba(255,255,255,0.35)] md:text-xl">
-          Read pinned notices, latest parish news, and updates from the pulpit and parish office � all in one place.
+          Read pinned notices, latest parish news, and updates from the pulpit and parish office  all in one place.
         </p>
       </ParishPageHero>
 
@@ -124,12 +124,12 @@ export function Announcements() {
                   <div className="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">{a.category}</div>
                   {a.poster_url ? (
                     <div className="mb-4 overflow-hidden rounded-xl border border-white/10 bg-black/10">
-                      <img src={a.poster_url} alt="" className="w-full max-h-56 object-contain object-top bg-black/20" loading="lazy" />
+                      <img src={a.poster_url} alt="" className="w-full max-h-56 object-contain object-top bg-black/20" loading="eager" />
                     </div>
                   ) : null}
                   <h3 className="font-bold text-lg mb-3">{a.title}</h3>
                   <p className="text-white/85 text-sm leading-relaxed whitespace-pre-line">{a.content}</p>
-                  <p className="text-white/60 text-xs mt-4">{a.display_date ? `� ${a.display_date}` : ""}</p>
+                  <p className="text-white/60 text-xs mt-4">{a.display_date ? ` ${a.display_date}` : ""}</p>
                 </div>
               ))}
             </div>
@@ -177,7 +177,7 @@ export function Announcements() {
                   </div>
                   {a.poster_url ? (
                     <div className="sm:w-44 sm:flex-shrink-0 cursor-pointer" onClick={()=>setLightbox(a.poster_url)}>
-                      <img src={a.poster_url} alt={a.title} className="w-full h-48 sm:h-full object-cover sm:rounded-r-2xl" loading="lazy" style={{minHeight:'160px'}}/>
+                      <img src={a.poster_url} alt={a.title} className="w-full h-48 sm:h-full object-cover sm:rounded-r-2xl" loading="eager" style={{minHeight:'160px'}}/>
                     </div>
                   ) : null}
                 </div>

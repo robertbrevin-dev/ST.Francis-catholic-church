@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { signIn } from '../../../lib/auth'
 
@@ -20,15 +20,48 @@ export function AdminLogin() {
   const [loading, setLoading] = useState(false)
   const [focused, setFocused] = useState('')
 
+  const attempts = React.useRef(0)
+  const lockedUntil = React.useRef<number>(0)
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    // Check lockout
+    const now = Date.now()
+    if (lockedUntil.current > now) {
+      const secs = Math.ceil((lockedUntil.current - now) / 1000)
+      setError(`Too many failed attempts. Please wait ${secs} seconds.`)
+      return
+    }
+
+    // Sanitize inputs
+    const cleanEmail = email.trim().toLowerCase().slice(0, 254)
+    const cleanPassword = password.slice(0, 128)
+    if (!cleanEmail || !cleanPassword) {
+      setError('Please enter both email and password.')
+      return
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setError('Please enter a valid email address.')
+      return
+    }
+
     setLoading(true)
     try {
-      await signIn(email, password)
+      await signIn(cleanEmail, cleanPassword)
+      attempts.current = 0
       navigate('/admin')
     } catch {
-      setError('Invalid email or password. Please try again.')
+      attempts.current += 1
+      if (attempts.current >= 5) {
+        const lockMins = attempts.current >= 10 ? 15 : 3
+        lockedUntil.current = Date.now() + lockMins * 60 * 1000
+        setError(`Too many failed attempts. Account locked for ${lockMins} minutes.`)
+      } else {
+        const remaining = 5 - attempts.current
+        setError(`Invalid email or password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`)
+      }
     } finally {
       setLoading(false)
     }
@@ -44,7 +77,7 @@ export function AdminLogin() {
             </svg>
           </div>
           <h2>St. Francis Cheptarit</h2>
-          <p className="tag">Catholic Parish · Mosoriot</p>
+          <p className="tag">Catholic Parish &bull; Mosoriot</p>
           <p className="diocese">Diocese of Kapsabet</p>
           <div className="admin-login-roles">
             {ROLES.map((role) => (
@@ -175,7 +208,7 @@ export function AdminLogin() {
                   >
                     <path d="M21 12a9 9 0 11-6.219-8.56" />
                   </svg>
-                  Signing in…
+                  Signing in
                 </span>
               ) : (
                 'Sign in to dashboard'

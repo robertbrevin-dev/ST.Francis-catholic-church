@@ -4,10 +4,10 @@ import { Link } from "react-router";
 import { Calendar, Clock, Phone, ArrowRight, Bell, ChevronRight, ChevronLeft, Smartphone, MapPin, Heart, Users, BookOpen } from "lucide-react";
 import { useScrollReveal, ScrollReveal, StaggerContainer, StaggerItem } from "../components/scroll-reveal";
 import { CHURCH_PHONE, PARISH_TEL_HREF, WHATSAPP_NUMBER } from "../../lib/parishContact";
-import { fetchUsccbDailyReading, type DailyReadingDisplay } from "../../lib/usccbDailyReading";
 import { KSUC_GATE_FRAMING_POSITION, KSUC_GATE_IMAGE_URL } from "../../lib/ksucGateImage";
 import { fetchPublishedAnnouncements, type AnnouncementRow } from "../../lib/announcements";
 import { isSupabaseConfigured } from "../../lib/supabase";
+import { fetchUsccbDailyReading, type DailyReadingDisplay } from "../../lib/usccbDailyReading";
 
 const LIVE_ANNOUNCEMENTS = [
   "Welcome to St. Francis Cheptarit Catholic Parish — Mosoriot, Nandi County",
@@ -209,8 +209,9 @@ const ChurchSVG = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColo
 export function Home() {
   const [tickerIndex, setTickerIndex] = useState(0);
   const [showTicker, setShowTicker] = useState(true);
-  const [dailyReading, setDailyReading] = useState<DailyReadingDisplay | null>(null);
   const [readingLoading, setReadingLoading] = useState(true);
+  const [dailyReading, setDailyReading] = useState<DailyReadingDisplay | null>(null);
+  const reading = dailyReading;
   const [cwaSlide, setCwaSlide] = useState(0);
   const [cmaSlide, setCmaSlide] = useState(0);
   const [pmcSlide, setPmcSlide] = useState(0);
@@ -240,6 +241,7 @@ export function Home() {
       }
       setFeedLoading(false);
     })();
+
     return () => {
       cancelled = true;
     };
@@ -317,11 +319,10 @@ export function Home() {
 
     const load = async () => {
       setReadingLoading(true);
-      const data = await fetchUsccbDailyReading();
-      if (!cancelled) {
-        setDailyReading(data);
-        setReadingLoading(false);
-      }
+      try {
+        const data = await fetchUsccbDailyReading();
+        if (!cancelled) { setDailyReading(data); setReadingLoading(false); }
+      } catch { setReadingLoading(false); }
     };
     void load();
 
@@ -340,7 +341,6 @@ export function Home() {
     };
   }, []);
 
-  const reading = dailyReading;
 
   return (
     <div>
@@ -389,18 +389,18 @@ export function Home() {
         <div className="absolute inset-0 z-[1] hero-overlay" />
         <div className="relative z-10 mx-auto w-full max-w-5xl px-4 pt-16 text-center md:flex md:min-h-screen md:flex-col md:justify-center md:pt-0">
           <div className="mb-6 flex justify-center animate-float">
-            <div className="h-36 w-36 md:h-44 md:w-44 rounded-full overflow-hidden border-4 shadow-2xl" style={{ borderColor: "#8d5439" }}>
+            <div className="home-hero-logo h-36 w-36 md:h-44 md:w-44 rounded-full overflow-hidden border-4" style={{ borderColor: "#8d5439" }}>
               <img src="/images/church.jpg" alt="St. Francis Cheptarit Parish Logo" className="h-full w-full object-cover" />
             </div>
           </div>
-          <div className="inline-block border text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-widest uppercase" style={{ background: "rgba(124,45,18,0.3)", borderColor: "rgba(180,83,9,0.6)", color: "#fed7aa" }}>
+          <div className="home-hero-badge inline-block text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-widest uppercase" style={{ background: "rgba(124,45,18,0.3)", borderColor: "rgba(180,83,9,0.6)", color: "#fed7aa" }}>
             Diocese of Kapsabet &bull; Kenya
           </div>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white leading-tight">
+          <h1 className="home-hero-title text-4xl md:text-6xl lg:text-7xl mb-4">
             St. Francis <span style={{ color: "#e6c7ad" }}>Cheptarit</span>
           </h1>
-          <h2 className="text-xl md:text-2xl font-medium text-green-200 mb-3">Catholic Parish &mdash; Mosoriot, Nandi County</h2>
-          <p className="text-base md:text-xl text-white/85 mb-6 max-w-2xl mx-auto leading-relaxed">Rooted in Faith. United in Love. Serving Our Community.</p>
+          <h2 className="home-hero-subtitle text-xl md:text-2xl mb-3">Catholic Parish &mdash; Mosoriot, Nandi County</h2>
+          <p className="home-hero-tagline text-base md:text-xl mb-6 max-w-2xl mx-auto leading-relaxed">Rooted in Faith. United in Love. Serving Our Community.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/mass-times" className="inline-flex items-center justify-center gap-2 text-white font-bold px-8 py-4 rounded-full text-base transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 btn-ripple" style={{ background: "linear-gradient(135deg, #8d5439, #bf875f)" }}>
               <Calendar className="h-5 w-5" /> Mass Times
@@ -640,7 +640,7 @@ export function Home() {
                   src="/images/bishop-john-lelei-outdoor-full.png"
                   alt="Rt. Rev. John Kiplimo Lelei, Bishop of Kapsabet, in pastoral dress outdoors"
                   className="aspect-[4/5] w-full object-cover object-[42%_center] sm:aspect-[3/4]"
-                  loading="lazy"
+                  loading="eager"
                 />
                 <figcaption className="border-t border-[#827717]/12 bg-white/80 px-4 py-3 text-center text-xs font-medium text-[#5a3018] sm:text-sm">
                   Rt. Rev. John Kiplimo Lelei — Bishop of the Roman Catholic Diocese of Kapsabet
@@ -672,8 +672,8 @@ export function Home() {
         <div className="container relative z-10 mx-auto max-w-5xl">
           <div className="grid items-center gap-12 md:grid-cols-2">
             <ScrollReveal direction="left">
-              <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-green-700 drop-shadow-sm">Welcome to Our Parish</p>
-              <h2 className="mb-4 text-3xl font-bold drop-shadow-sm md:text-4xl" style={{ color: "#5a3018" }}>
+              <p className="home-welcome-eyebrow mb-2 text-sm font-semibold uppercase tracking-wider">Welcome to Our Parish</p>
+              <h2 className="home-welcome-heading mb-4 text-3xl md:text-4xl">
                 A Community of Faith in Mosoriot
               </h2>
               <div className="section-divider-left mb-5"></div>
@@ -733,10 +733,10 @@ export function Home() {
             ].map((v) => (
               <StaggerItem
                 key={v.title}
-                className="touch-card rounded-2xl border border-white/30 bg-white/10 p-8 text-center shadow-lg backdrop-blur-md"
+                className="home-value-card touch-card text-center shadow-lg"
               >
                 <div className="mb-4 flex justify-center text-amber-200">{v.icon}</div>
-                <h3 className="mb-3 text-xl font-bold text-white drop-shadow-sm">{v.title}</h3>
+                <h3 className="home-value-title mb-3 text-xl text-white">{v.title}</h3>
                 <p className="text-sm leading-relaxed text-white/90">{v.desc}</p>
               </StaggerItem>
             ))}
@@ -1332,12 +1332,12 @@ export function Home() {
               <div className="space-y-4">
                 <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.12)" }}>
                   <p className="text-green-300 text-xs mb-1">Lipa na M-PESA &rarr; Pay Bill</p>
-                  <p className="text-white font-black text-4xl tracking-widest">247247</p>
+                  <p className="home-giving-number">247247</p>
                   <p className="text-green-300 text-xs mt-1">Paybill Number</p>
                 </div>
                 <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.12)" }}>
                   <p className="text-green-300 text-xs mb-1">Account Number</p>
-                  <p className="text-white font-black text-4xl tracking-widest">341370</p>
+                  <p className="home-giving-number">341370</p>
                 </div>
               </div>
             </div>
@@ -1372,7 +1372,7 @@ export function Home() {
               <img src="/images/church.jpg" alt="" className="h-full w-full object-cover" />
             </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#6e3c28" }}>Join Our Parish Family</h2>
+          <h2 className="home-cta-heading text-3xl md:text-4xl mb-4">Join Our Parish Family</h2>
           <p className="text-gray-600 mb-8 max-w-xl mx-auto leading-relaxed">All are welcome at St. Francis Cheptarit. Our doors and hearts are open to you.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20St.%20Francis%20Cheptarit%20Catholic%20Parish`} target="_blank" rel="noopener noreferrer"

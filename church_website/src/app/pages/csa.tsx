@@ -75,7 +75,7 @@ export function CsaPage() {
                   alt={KSUC_GATE.alt}
                   className="aspect-[4/3] w-full object-cover"
                   style={{ objectPosition: KSUC_GATE_FRAMING_POSITION }}
-                  loading="lazy"
+                  loading="eager"
                 />
                 <figcaption className="border-t border-[#827717]/15 bg-white/60 px-4 py-3 text-xs leading-relaxed text-gray-700 sm:text-sm">
                   {KSUC_GATE.caption}
@@ -102,7 +102,7 @@ export function CsaPage() {
             <div className="grid gap-6 sm:grid-cols-2">
               {CSA_PHOTOS.map((photo) => (
                 <figure key={photo.src} className="parish-glass-card overflow-hidden rounded-2xl shadow-md">
-                  <img src={photo.src} alt={photo.alt} className="aspect-[4/3] w-full object-cover object-center" loading="lazy" />
+                  <img src={photo.src} alt={photo.alt} className="aspect-[4/3] w-full object-cover object-center" loading="eager" />
                   {photo.caption ? (
                     <figcaption className="border-t border-[#827717]/15 p-4 text-xs leading-relaxed text-gray-700 sm:text-sm">{photo.caption}</figcaption>
                   ) : null}

@@ -52,42 +52,50 @@ function setCachedProfile(p: AdminProfile | null) {
   else localStorage.removeItem("parish_admin_profile")
 }
 
+function getSessionFromStorage() {
+  try {
+    const raw = localStorage.getItem(SUPABASE_AUTH_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    const session = parsed?.currentSession ?? parsed
+    if (!session?.access_token) return null
+    if (session.expires_at && session.expires_at * 1000 < Date.now()) return null
+    return session
+  } catch { return null }
+}
+
 export function useAdmin() {
-  const [session, setSession] = useState<Session | null>(null)
+  const [session, setSession] = useState<Session | null>(() => getSessionFromStorage())
   const [profile, setProfile] = useState<AdminProfile | null>(getCachedProfile)
-  const [loading, setLoading] = useState(!getCachedProfile())
-
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    const s = getSessionFromStorage()
+    setSession(s)
+    if (s?.user) {
+      const cached = getCachedProfile()
+      if (!cached || cached.auth_user_id !== s.user.id) {
+        const supaUrl = (import.meta.env.VITE_SUPABASE_URL as string).replace(/[/]$/, "")
+        const supaKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+        fetch(supaUrl + "/rest/v1/admin_profiles?auth_user_id=eq." + s.user.id + "&select=*&limit=1", {
+          headers: { apikey: supaKey, Authorization: "Bearer " + s.access_token }
+        }).then(r => r.ok ? r.json() : null)
+          .then(rows => { const p = rows?.[0] ?? null; setProfile(p); setCachedProfile(p) })
+          .catch(() => {})
+      }
+    } else { setProfile(null); setCachedProfile(null) }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       setSession(session)
       if (session?.user) {
-        const cached = getCachedProfile()
-        if (!cached || cached.auth_user_id !== session.user.id) {
-          const p = await getAdminProfile(session.user.id)
-          setProfile(p)
-          setCachedProfile(p)
-        }
-      } else {
-        setProfile(null)
-        setCachedProfile(null)
-      }
-      setLoading(false)
-    }).catch(() => setLoading(false))
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event: any, session: any) => {
-      setSession(session)
-      if (session?.user) {
-        const p = await getAdminProfile(session.user.id)
-        setProfile(p)
-        setCachedProfile(p)
-      } else {
-        setProfile(null)
-        setCachedProfile(null)
-      }
+        const supaUrl = (import.meta.env.VITE_SUPABASE_URL as string).replace(/[/]$/, "")
+        const supaKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+        fetch(supaUrl + "/rest/v1/admin_profiles?auth_user_id=eq." + session.user.id + "&select=*&limit=1", {
+          headers: { apikey: supaKey, Authorization: "Bearer " + session.access_token }
+        }).then(r => r.ok ? r.json() : null)
+          .then(rows => { const p = rows?.[0] ?? null; setProfile(p); setCachedProfile(p) })
+          .catch(() => {})
+      } else { setProfile(null); setCachedProfile(null) }
     })
-
     return () => subscription.unsubscribe()
   }, [])
-
-  return { session, profile, loading, isAdmin: !!profile }
+  return { session, profile, loading, isAdmin: !!(session && profile) }
 }

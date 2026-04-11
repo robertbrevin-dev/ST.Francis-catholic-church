@@ -1,31 +1,40 @@
-
-/* ============================================================
-   HERO — Sacred Gold Luxury Church Aesthetic
-   ============================================================ */
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap");
 
+/* ── HERO TITLE ─────────────────────────────────────────── */
 .home-hero-title {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-weight: 800 !important;
   letter-spacing: -0.02em;
+  line-height: 1.05 !important;
   background: linear-gradient(135deg, #ffffff 0%, #fed7aa 35%, #ffffff 55%, #e6c7ad 75%, #ffffff 100%);
   background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: hero-gold-shimmer 7s ease-in-out infinite;
-  text-shadow: none;
 }
 @keyframes hero-gold-shimmer {
   0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 .home-hero-subtitle {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-style: italic !important;
   letter-spacing: 0.03em;
+  color: rgba(230,199,173,0.95) !important;
 }
 .home-hero-tagline {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
   font-style: italic;
+  color: rgba(255,255,255,0.9) !important;
   letter-spacing: 0.04em;
 }
 .home-hero-badge {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  letter-spacing: 0.25em !important;
+  background: linear-gradient(135deg, rgba(124,45,18,0.4), rgba(141,84,57,0.3)) !important;
+  border: 1px solid rgba(191,135,95,0.55) !important;
+  color: #fed7aa !important;
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 20px rgba(124,45,18,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
 }
@@ -34,40 +43,79 @@
     0 0 0 3px rgba(191,135,95,0.5),
     0 0 0 8px rgba(191,135,95,0.15),
     0 0 50px rgba(191,135,95,0.4),
+    0 20px 60px rgba(0,0,0,0.6) !important;
+  border-color: #bf875f !important;
 }
 .home-hero-btn-primary {
+  background: linear-gradient(135deg, #7c2d12 0%, #9c4e1d 50%, #8d5439 100%) !important;
+  box-shadow: 0 4px 24px rgba(124,45,18,0.4), 0 1px 0 rgba(255,255,255,0.12) inset !important;
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  transition: all 0.3s cubic-bezier(.22,1,.36,1) !important;
+  border: none !important;
 }
 .home-hero-btn-primary:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 32px rgba(124,45,18,0.5) !important;
 }
 .home-hero-btn-ghost {
+  border: 1.5px solid rgba(255,255,255,0.45) !important;
+  background: rgba(255,255,255,0.1) !important;
+  backdrop-filter: blur(8px) !important;
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  transition: all 0.3s cubic-bezier(.22,1,.36,1) !important;
 }
 .home-hero-btn-ghost:hover {
+  background: rgba(255,255,255,0.2) !important;
+  transform: translateY(-3px) !important;
 }
 
-/* Info Bar */
+/* ── INFO BAR ───────────────────────────────────────────── */
 .home-info-bar {
-}
-.home-info-item {
-  transition: background 0.2s ease;
-  border-radius: 10px;
-  padding: 10px 8px;
-}
-.home-info-label {
-  text-transform: uppercase;
-}
-.home-info-value {
+  background: linear-gradient(90deg, #3d1a0a 0%, #6e3c28 35%, #8d5439 65%, #5a2a10 100%) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.2) !important;
 }
 
-/* Welcome Section */
+/* ── SECTION HEADINGS ───────────────────────────────────── */
+.home-section-heading {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+}
+.home-section-eyebrow {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-style: italic !important;
+  letter-spacing: 0.08em !important;
+}
 .home-welcome-heading {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-weight: 700 !important;
+  color: #3a1f13 !important;
+  line-height: 1.15 !important;
 }
 .home-welcome-eyebrow {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-style: italic !important;
+  color: #8d5439 !important;
+  font-size: 1rem !important;
 }
 
-/* Values Cards */
+/* ── VALUE CARDS ────────────────────────────────────────── */
 .home-value-card {
   position: relative;
   overflow: hidden;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  background: rgba(255,255,255,0.1) !important;
+  backdrop-filter: blur(16px) !important;
+  transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease !important;
+  padding: 36px 28px !important;
 }
 .home-value-card::before {
   content: "";
@@ -78,27 +126,94 @@
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+.home-value-card:hover { transform: translateY(-8px) !important; box-shadow: 0 24px 60px rgba(0,0,0,0.2) !important; }
 .home-value-card:hover::before { opacity: 1; }
-.home-value-icon {
-  width: 68px; height: 68px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 20px;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
 .home-value-title {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
 }
 
-/* Section Headings */
-.home-section-heading {
+/* ── MINISTRY CARDS ─────────────────────────────────────── */
+.ministry-card {
+  transition: all 0.3s cubic-bezier(.22,1,.36,1) !important;
+  border-top: 3px solid transparent !important;
+  border-radius: 16px !important;
 }
-.home-section-eyebrow {
+.ministry-card:hover {
+  border-top-color: #8d5439 !important;
+  transform: translateY(-6px) !important;
+  box-shadow: 0 20px 48px rgba(140,90,61,0.18) !important;
+}
+.ministry-card h3 {
+  font-family: "Playfair Display", Georgia, serif !important;
 }
 
-/* Giving Section */
+/* ── EVENT CARDS ────────────────────────────────────────── */
+.parish-glass-card {
+  transition: all 0.3s cubic-bezier(.22,1,.36,1) !important;
+}
+.parish-glass-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 18px 44px rgba(58,31,19,0.14) !important;
+}
+
+/* ── GIVING SECTION ─────────────────────────────────────── */
 .home-giving-number {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-size: 2.8rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1em !important;
+  color: #ffffff !important;
 }
 
-/* CTA Section */
+/* ── CTA SECTION ────────────────────────────────────────── */
 .home-cta-heading {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-weight: 800 !important;
+  color: #3a1f13 !important;
+  line-height: 1.15 !important;
+}
+
+/* ── TICKER BAR ─────────────────────────────────────────── */
+.home-ticker-text {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* ── BISHOP SECTION ─────────────────────────────────────── */
+.bishop-section h2 {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-weight: 800 !important;
+}
+.bishop-section p em, .bishop-section p i {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+}
+
+/* ── ORNAMENT DIVIDERS ──────────────────────────────────── */
+.section-divider {
+  background: linear-gradient(90deg, transparent, #8d5439, transparent) !important;
+  height: 1px !important;
+  width: 120px !important;
+  margin: 16px auto 0 !important;
+  border-radius: 0 !important;
+}
+.section-divider-left {
+  background: linear-gradient(90deg, #8d5439, transparent) !important;
+  height: 1px !important;
+  width: 120px !important;
+  margin: 16px 0 0 !important;
+  border-radius: 0 !important;
+}
+
+/* ── SMOOTH PAGE TRANSITIONS ────────────────────────────── */
+.page-background-section {
+  transition: background 0.4s ease !important;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .home-hero-title { font-size: clamp(2.4rem, 10vw, 3.5rem) !important; }
+  .home-giving-number { font-size: 2rem !important; }
 }

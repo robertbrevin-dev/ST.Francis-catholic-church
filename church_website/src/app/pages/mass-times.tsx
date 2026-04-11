@@ -115,7 +115,7 @@ export function MassTimes() {
           </div>
 
           <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
-            <p className="text-yellow-800 font-semibold mb-2">📢 Important Notice</p>
+            <p className="text-yellow-800 font-semibold mb-2"> Important Notice</p>
             <p className="text-yellow-700 text-sm leading-relaxed">
               Mass times may change during Advent, Lent, Easter, and other special liturgical seasons.
               Please check the parish announcements board, attend Sunday Mass for notices, or contact

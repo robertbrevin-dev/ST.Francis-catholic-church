@@ -445,7 +445,7 @@ export function AdminAnnouncements() {
               color: "#3a1f13",
             }}
           >
-            {diagBusy ? "Running checks�" : "Run Supabase checks"}
+            {diagBusy ? "Running checks" : "Run Supabase checks"}
           </button>
           {diag ? (
             <pre
@@ -504,7 +504,7 @@ export function AdminAnnouncements() {
                   <span style={{ fontSize: "11px", background: "#f0e8e0", color: "#7c4c2e", padding: "2px 8px", borderRadius: "10px" }}>{a.category}</span>
                 </div>
                 <p style={{ fontSize: "11px", color: "#9e8070", margin: "0 0 6px" }}>
-                  {a.display_date ? `${a.display_date}�� ` : ""}Expires {new Date(a.expires_at).toLocaleDateString()}
+                  {a.display_date ? `${a.display_date} ` : ""}Expires {new Date(a.expires_at).toLocaleDateString()}
                 </p>
                 {a.poster_url ? (
                   <img

@@ -29,6 +29,7 @@ import { AdminLivestream } from "./pages/admin/livestream"
 import { AdminSettings } from "./pages/admin/settings"
 import { AdminMinistries } from "./pages/admin/ministries"
 import { AdminServices } from "./pages/admin/services"
+import { NotFound } from "./pages/not-found"
 import { AdminAboutStories } from "./pages/admin/about"
 
 export const router = createBrowserRouter([
@@ -49,6 +50,7 @@ export const router = createBrowserRouter([
     { path: "livestream", Component: Livestream },
     { path: "contact", Component: Contact },
     { path: "giving", Component: Giving },
+  { path: "*", Component: NotFound },
   ]},
   { path: "/admin/login", Component: AdminLogin },
   {
