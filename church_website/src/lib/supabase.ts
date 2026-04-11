@@ -10,6 +10,7 @@ export const SUPABASE_AUTH_STORAGE_KEY = "stfrancis-admin-auth"
 
 const SUPABASE_FETCH_TIMEOUT_MS = 120_000
 const SUPABASE_STORAGE_TIMEOUT_MS = 90_000
+const SUPABASE_REST_TIMEOUT_MS = 90_000
 const SUPABASE_AUTH_TIMEOUT_MS = 45_000
 
 function requestUrl(input: RequestInfo | URL): string {
