@@ -540,7 +540,7 @@ export function Home() {
                 sizes="100vw"
                 loading={idx === 0 ? "eager" : "lazy"}
                 decoding="async"
-                fetchPriority={idx === 0 ? "high" : "auto"}
+                fetchpriority={idx === 0 ? "high" : "auto"}
               />
             </div>
           ))}
